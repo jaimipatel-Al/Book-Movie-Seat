@@ -1,0 +1,8 @@
+@layer components {
+    .navigation {
+        @apply flex justify-between flex-col h-full
+    }
+    .navigation li{
+        @apply flex items-center justify-between space-x-2 pax-5 py-2 md:py-3 border-b
+    }
+}

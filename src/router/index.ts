@@ -8,6 +8,35 @@ const router = createRouter({
       name: 'home',
       component: () => import('@/views/HomePage.vue'),
     },
+
+    {
+      path: '/auth',
+      component: () => import('../views/auth/AuthLayout.vue'),
+      children: [
+        {
+          path: 'signUp',
+          name: 'signUp',
+          component: () => import('../views/auth/SignUp.vue'),
+        },
+        {
+          path: 'login',
+          name: 'login',
+          component: () => import('../views/auth/LogIn.vue'),
+        },
+      ],
+    },
+
+    {
+      path: '/user',
+      component: () => import('@/views/user/UserLayout.vue'),
+      children: [
+        {
+          path: 'profile',
+          name: 'profile',
+          component: () => import('../views/user/UserProfile.vue'),
+        },
+      ],
+    },
   ],
 })
 
