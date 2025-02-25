@@ -2,38 +2,52 @@
     .pa-10 {
         @apply p-4 sm:p-6 md:p-8 lg:p-10
     }
-    .pa-5{
+
+    .pa-5 {
         @apply p-2 sm:p-3 md:p-4 lg:p-5
     }
+
     .pax-10 {
         @apply px-4 sm:px-6 md:px-8 lg:px-10
     }
-    .pax-5{
+
+    .pay-10 {
+        @apply py-4 sm:py-6 md:py-8 lg:py-10
+    }
+
+    .pax-5 {
         @apply px-2 sm:px-3 md:px-4 lg:px-5
     }
-    .pay-5{
+
+    .pay-5 {
         @apply py-2 sm:py-3 md:py-4 lg:py-5
     }
-    .r-space-x-3{
+
+    .r-space-x-3 {
         @apply space-x-1 sm:space-x-2 md:space-x-3
     }
-    .ma-5{
+
+    .ma-5 {
         @apply m-1 sm:m-2 md:m-3
     }
-    .r-text-3xl{
+
+    .r-text-3xl {
         @apply text-xl sm:text-2xl md:text-3xl font-bold
     }
-    .r-text-2xl{
+
+    .r-text-2xl {
         @apply text-lg sm:text-xl md:text-2xl font-bold
     }
-    .r-w-10{
+
+    .r-w-10 {
         @apply w-6 sm:w-8 lg:w-10
     }
-    .text-normal{
+
+    .text-normal {
         @apply text-xs sm:text-sm md:text-base
     }
 }
 
-.t-nowrap{
+.t-nowrap {
     text-wrap: nowrap;
 }
