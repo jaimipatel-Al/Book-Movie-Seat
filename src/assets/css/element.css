@@ -6,4 +6,12 @@
     .blue-outline {
         @apply bg-white text-blue-600 hover:bg-blue-600 hover:text-white border border-blue-600 rounded-xl disabled:bg-gray-200 disabled:cursor-not-allowed disabled:text-blue-500 flex justify-center items-center font-semibold px-2 sm:px-3 py-1 sm:py-2
     }
+
+    .img-thumbnail {
+        @apply w-full h-64 sm:h-72 md:h-96 object-cover rounded-xl
+    }
+
+    .sub-img-thumbnail{
+        @apply w-full h-40 sm:h-56 md:h-72 object-cover rounded-xl
+    }
 }

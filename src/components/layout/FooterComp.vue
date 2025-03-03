@@ -9,7 +9,7 @@ const openLink = (link: string) => {
 </script>
 
 <template>
-  <footer class="bg-gray-800 text-center">
+  <footer class="bg-gray-800 text-center mt-2 md:mt-3">
     <div class="flex items-center r-space-x-3 pay-10">
       <div class="flex-line"></div>
       <div
