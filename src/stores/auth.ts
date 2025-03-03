@@ -1,12 +1,28 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
+interface User {
+  token?: string
+  email?: string
+  userId?: string
+  role?: string
+  name?: string
+}
+
+export const useAuthStore = defineStore('user', () => {
+  const userName = import.meta.env.VITE_API_USER_NAME
+
+  const userData = ref<User>(JSON.parse(localStorage.getItem(userName) || '{}'))
+
+  const loginUser = (credentials: User) => {
+    userData.value = credentials
+    localStorage.setItem(userName, JSON.stringify(userData.value))
   }
 
-  return { count, doubleCount, increment }
+  const logOut = () => {
+    userData.value = {}
+    localStorage.removeItem(userName)
+  }
+
+  return { userData, loginUser, logOut }
 })

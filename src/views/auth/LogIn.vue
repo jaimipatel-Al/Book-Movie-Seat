@@ -1,22 +1,107 @@
 <script setup lang="ts">
-  import { MagnifyingGlassIcon } from '@heroicons/vue/24/solid'
-  import { ref } from 'vue';
+  import { EyeIcon, EyeSlashIcon, ArrowPathIcon } from "@heroicons/vue/24/solid";
+  import { Form, Field } from "vee-validate";
+  import * as yup from "yup";
+  import { useRouter } from "vue-router";
+  import { onMounted, ref } from "vue";
+  import Axios from "@/plugin/axios";
+  import api from "@/plugin/apis";
+  import toast from "@/plugin/toast";
+  import { useAuthStore } from '@/stores/auth'
 
-  const searchMovie = ref('')
+  const router = useRouter();
+  const authStore = useAuthStore()
 
-  const searchingMovie = () => { }
+  const schema = yup.object({
+    Email: yup.string().required().email(),
+    Password: yup
+      .string()
+      .required()
+      .min(8)
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      ),
+  });
+
+  const userName = import.meta.env.VITE_API_USER_NAME;
+
+  const isLoading = ref(false);
+  const email = ref("");
+  const password = ref("");
+  const isPassword = ref(false);
+  const isRemember = ref(false);
+
+  const login = async () => {
+    isLoading.value = true;
+
+    const user = {
+      email: email.value,
+      password: password.value,
+    };
+
+    await Axios.post(api.login, user)
+      .then(({ data }) => {
+        if (isRemember.value) {
+          const user = {
+            password: password.value,
+            email: email.value,
+          };
+          sessionStorage.setItem(userName, JSON.stringify(user));
+        } else sessionStorage.removeItem(userName);
+
+        authStore.loginUser(data.data)
+        toast.success(data?.message ?? "User Login Success!");
+        router.push("/");
+      })
+      .catch((er) => {
+        toast.error(er?.response?.data?.message ?? "User Can't Login!");
+      })
+      .finally(() => {
+        isLoading.value = false;
+      });
+  };
+
+  onMounted(() => {
+    const authUser = sessionStorage.getItem(userName);
+
+    if (authUser) {
+      const user = JSON.parse(authUser);
+      email.value = user.email;
+      password.value = user.password;
+      isRemember.value = true;
+    }
+  });
 </script>
 
 <template>
-  <header class="pay-5 pax-10 flex justify-between">
-    <div class="flex r-space-x-3">
-      <img src="@/assets/img/icon.svg" alt="Logo" class="w-12" />
-      <div class="flex r-space-x-3 border border-gray-400 rounded-xl w-96">
-        <MagnifyingGlassIcon class="w-6 text-gray-500 mx-2" />
-        <input v-model="searchMovie" type="search"
-          class="w-full text-lg px-3 py-2 rounded-xl placeholder:text-gray-400 outline-none text-gray-600"
-          placeholder="Search Your Movie" @input="searchingMovie()" />
+  <div class="auth-form">
+    <Form @submit="login" :validation-schema="schema" v-slot="{ errors }">
+      <h1>Login</h1>
+      <p class="sub-line" @click="router.push('/auth/signup')">Create New Account</p>
+
+      <label for="email">Email Address</label>
+      <Field v-model="email" type="email" name="Email" id="email" class="input"
+        placeholder="Enter Your Email Address" />
+      <p class="error-message">{{ errors?.Email }}</p>
+      <label for="password">Password</label>
+      <div class="input flex items-center justify-between">
+        <Field v-model="password" :type="isPassword ? 'text' : 'password'" name="Password" id="password"
+          class="w-full outline-none" placeholder="Enter Your Password" />
+        <div class="pl-2" @click="isPassword = !isPassword">
+          <EyeSlashIcon v-if="isPassword" class="password-icon" />
+          <EyeIcon v-else class="password-icon" />
+        </div>
       </div>
-    </div>
-  </header>
+      <p class="error-message">{{ errors?.Password }}</p>
+      <label for="remember">
+        <input v-model="isRemember" type="checkbox" id="remember" class="w-4 h-4 cursor-pointer" />
+        Remember Me
+      </label>
+
+      <button type="submit">
+        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Login
+      </button>
+    </Form>
+  </div>
 </template>

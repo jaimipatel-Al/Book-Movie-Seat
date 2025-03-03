@@ -1,43 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { routes } from './routes'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('@/views/HomePage.vue'),
-    },
+  history: createWebHistory(import.meta.env.VITE_API_BASE_URL),
+  routes,
+})
 
-    {
-      path: '/auth',
-      component: () => import('../views/auth/AuthLayout.vue'),
-      children: [
-        {
-          path: 'signUp',
-          name: 'signUp',
-          component: () => import('../views/auth/SignUp.vue'),
-        },
-        {
-          path: 'login',
-          name: 'login',
-          component: () => import('../views/auth/LogIn.vue'),
-        },
-      ],
-    },
+const currentUser = () => {
+  return new Promise((resolve) => {
+    const authStore = useAuthStore()
+    const token = authStore.userData?.token ?? ''
+    resolve(token)
+  })
+}
 
-    {
-      path: '/user',
-      component: () => import('@/views/user/UserLayout.vue'),
-      children: [
-        {
-          path: 'profile',
-          name: 'profile',
-          component: () => import('../views/user/UserProfile.vue'),
-        },
-      ],
-    },
-  ],
+router.beforeEach(async (to, from, next) => {
+  if (to.matched.some((record) => record?.meta?.auth ?? true)) {
+    if (await currentUser()) next()
+    else next('/auth/login')
+  } else next()
 })
 
 export default router

@@ -7,17 +7,25 @@ import {
   FilmIcon,
   ChevronLeftIcon,
 } from "@heroicons/vue/24/solid";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import toast from "@/plugin/toast";
 
 const router = useRouter();
+const authStore = useAuthStore();
 
-const isLogin = ref(false);
 const searchMovie = ref("");
-const userName = ref("Guest");
+
+const isLogin = computed(() => (authStore.userData ? true : false));
+const userName = computed(() => (authStore.userData?.name ??'Guest'));
 
 const searchingMovie = () => {};
-const signOut = () => {};
+const signOut = () => {
+  authStore.logOut()
+  toast.success('User Logged Out successfully')
+    router.push('/auth/login')
+};
 
 const openSidebar = () => {
   document.getElementById("sidebar")?.classList.add("open");
@@ -75,7 +83,7 @@ const closeSearch = () => {
           >Hi, {{ userName }}</span
         >
       </div>
-      <button v-else class="blue-btn text-normal" @click="router.push('/auth/signUp')">
+      <button v-else class="blue-btn text-normal" @click="router.push('/auth/signup')">
         Sign Up
       </button>
       <MagnifyingGlassIcon
@@ -179,6 +187,7 @@ const closeSearch = () => {
 .sidebar.open {
   box-shadow: 0px 0px 12px 0px #999;
   right: 0;
+  z-index: 10;
 }
 
 .searchbar {
@@ -193,6 +202,7 @@ const closeSearch = () => {
 
 .searchbar.open {
   right: 0;
+  z-index: 10;
 }
 
 @media screen and (max-width: 640px) {
