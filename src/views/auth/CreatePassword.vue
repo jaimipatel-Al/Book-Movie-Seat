@@ -70,7 +70,7 @@ const createPassword = () => {};
       </div>
       <p class="error-message">{{ errors?.ConfirmPassword }}</p>
 
-      <button type="submit"><ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Create Password</button>
+      <button type="submit" :disabled="isLoading"><ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Create Password</button>
     </Form>
   </div>
 </template>

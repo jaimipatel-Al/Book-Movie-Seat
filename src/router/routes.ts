@@ -26,14 +26,29 @@ export const routes = [
   },
 
   {
-    path: '/user',
-    component: () => import('@/views/user/UserLayout.vue'),
-    children: [
-      {
-        path: 'profile',
-        name: 'profile',
-        component: () => import('../views/user/UserProfile.vue'),
-      },
-    ],
+    path: '/theater',
+    name: 'theater',
+    component: () => import('@/views/theater/TheaterList.vue'),
+  },
+  {
+    path: '/theater/add-theater',
+    name: 'add-theater',
+    component: () => import('@/views/theater/AddTheater.vue'),
+  },
+  {
+    path: '/theater/edit/:id',
+    name: 'edit-theater',
+    component: () => import('@/views/theater/EditTheater.vue'),
+  },
+  {
+    path: '/theater/:id',
+    name: 'view-theater',
+    component: () => import('@/views/theater/ViewTheater.vue'),
+  },
+
+  {
+    path: '/user/profile',
+    name: 'profile',
+    component: () => import('../views/user/UserProfile.vue'),
   },
 ]

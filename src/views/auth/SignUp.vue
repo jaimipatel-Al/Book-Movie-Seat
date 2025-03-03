@@ -20,7 +20,7 @@
       .test(
         "len",
         "Mobile number must be exactly 10 digits",
-        (val) => val && val.toString().length === 10
+        (val) => val?.toString().length === 10
       ),
     Password: yup
       .string()
@@ -117,7 +117,7 @@
       </div>
       <p class="error-message">{{ errors?.ConfirmPassword }}</p>
 
-      <button type="submit">
+      <button type="submit" :disabled="isLoading">
         <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Sign Up
       </button>
     </Form>

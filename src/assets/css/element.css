@@ -11,7 +11,34 @@
         @apply w-full h-64 sm:h-72 md:h-96 object-cover rounded-xl
     }
 
-    .sub-img-thumbnail{
+    .sub-img-thumbnail {
         @apply w-full h-40 sm:h-56 md:h-72 object-cover rounded-xl
+    }
+
+    .main-header {
+        @apply flex justify-between items-center w-full md:w-11/12 m-auto pa-10 t-nowrap
+    }
+
+    .main-header h2 {
+        @apply r-text-3xl font-bold text-gray-900
+    }
+
+    .input {
+        @apply text-normal-base text-gray-800 w-full border border-gray-600 py-1 sm:py-2 px-2 sm:px-3 rounded-md outline-none disabled:bg-slate-200
+    }
+
+    .label {
+        @apply text-normal font-semibold text-gray-600
+    }
+    .error-message {
+        @apply text-red-500 text-xs sm:text-sm h-3 sm:h-5
+    }
+
+    .password-icon {
+        @apply text-blue-700 r-w-8 cursor-pointer
+    }
+
+    .loading{
+        @apply r-text-2xl flex items-center justify-center text-gray-600
     }
 }
