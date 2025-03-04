@@ -7,6 +7,7 @@
   import Axios from "@/plugin/axios";
   import api from "@/plugin/apis";
   import toast from "@/plugin/toast";
+  import swal from "@/plugin/sweetalert";
 
   const route = useRoute();
   const router = useRouter();
@@ -44,7 +45,7 @@
     await Axios.post(api.setPassword, user)
       .then(({ data }) => {
         toast.success(data?.message ?? "Your Password Created Successfully!");
-        router.push('/user/profile')
+        router.push(`/theater/edit/$`);
       })
       .catch((er) => {
         toast.error(er?.response?.data?.message ?? "Password Can't Create!");
@@ -53,16 +54,43 @@
         isLoading.value = false;
       });
   };
+
+  const requestReset = async () => {
+    const email = {
+      email: route.query.email,
+    };
+
+    await Axios.post(api.requestReset, email)
+      .then(({ data }) => {
+        toast.success(data?.message ?? "Password reset link sent successfully!");
+      })
+      .catch((er) => {
+        toast.error(er?.response?.data?.message ?? "Password reset link can't sent!");
+      })
+      .finally(() => {
+        router.push("/");
+      });
+  };
+
   const verifyToken = async () => {
     isVerifying.value = true;
 
     await Axios.get(`${api.verifyToken}${route.query.token}`)
       .then(({ data }) => {
-        if(data.success)
-        toast.success('Please Create New Password.')
+        if (data.success) toast.success("Please Create New Password.");
       })
-      .catch((er) => {
-        // Not Verifying
+      .catch(() => {
+        swal
+          .fire({
+            title: "Link Expired",
+            text: "Please Create New Link For Generate Password",
+            icon: "warning",
+            showCancelButton: false,
+            confirmButtonText: "Reset",
+          })
+          .then((result) => {
+            if (result.isConfirmed) requestReset();
+          });
       })
       .finally(() => {
         isVerifying.value = false;
@@ -76,7 +104,10 @@
 
 <template>
   <div class="auth-form">
-    <Form @submit="createPassword" :validation-schema="schema" v-slot="{ errors }">
+    <p v-if="isVerifying" class="loading text-white">
+      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+    </p>
+    <Form v-else @submit="createPassword" :validation-schema="schema" v-slot="{ errors }">
       <h1>Create Password</h1>
       <p class="sub-line">ACreate Your New Password</p>
 

@@ -4,6 +4,7 @@ const requests = {
 
   verifyToken :'auth/verify-reset-token/',
   setPassword :'auth/set-password',
+  requestReset :'auth/request-reset',
 
   addTheater: 'auth/register-sub-admin',
   editTheater: 'auth/register-sub-admin', //sdfdsdfsdfjkferjgfjhfsjhfgsdjhfgsdjhfg
