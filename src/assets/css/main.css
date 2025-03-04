@@ -63,7 +63,7 @@
         @apply w-full sm:w-2/3 md:w-1/3 m-auto
     }
 
-    .add-edit-form .edit-owner-form {
+    .add-edit-form .edit-user-form {
         @apply w-full md:w-11/12 md:w-10/12 m-auto flex flex-col sm:flex-row flex-wrap
     }
 

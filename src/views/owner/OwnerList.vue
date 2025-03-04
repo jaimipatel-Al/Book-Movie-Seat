@@ -58,7 +58,7 @@
 
     <div ref="scrollComponent" class="h-5/6 overflow-y-auto px-5 md:px-0">
       <div v-for="o in owners" :key="o._id" class="pa-5 border rounded-xl shadow-md w-full md:w-2/3 my-5 md:mx-auto">
-        <h2 class="r-text-2xl text-gray-700 cursor-pointer hover:underline" @click="router.push(`/owner/${o._id}`)">{{ o.name }}</h2>
+        <h2 class="r-text-2xl text-gray-700 cursor-pointer hover:underline" @click="router.push(`/owner/view/${o._id}`)">{{ o.name }}</h2>
         <p class="flex sm:items-center space-y-1 sm:space-y-0 space-x-0 sm:space-x-5 md:space-x-10 font-semibold text-normal text-gray-500 flex-wrap
         flex-col sm:flex-row">
           <span class="t-nowrap">{{ o.email }}</span>

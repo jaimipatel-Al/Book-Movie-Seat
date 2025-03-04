@@ -15,23 +15,10 @@ const currentUser = () => {
   })
 }
 
-const completeOwner = () => {
-  return new Promise((resolve) => {
-    const authStore = useAuthStore()
-    let  isComplete=true
-    if(authStore.userData?.role == "sub_admin")
-       isComplete = authStore.userData?.isComplete ?? true
-
-    resolve(isComplete)
-  })
-}
-
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record?.meta?.auth ?? true)) {
-    if (await currentUser()) {
-      if (to.fullPath != '/theater/add' && !(await completeOwner())) next('/theater/add')
-      else next()
-    } else next('/auth/login')
+    if (await currentUser()) next()
+    else next('/auth/login')
   } else next()
 })
 

@@ -53,8 +53,7 @@ const login = async () => {
       authStore.loginUser(data.data)
       toast.success(data?.message ?? 'User Login Success!')
 
-      if (data.data.role == 'sub_admin' && !data.data.isComplete) router.push('/theater/add')
-      else router.push('/')
+      router.push('/')
     })
     .catch((er) => {
       toast.error(er?.response?.data?.message ?? "User Can't Login!")

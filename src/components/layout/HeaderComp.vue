@@ -33,6 +33,7 @@ const searchMovie = ref('')
 
 const isLogin = computed(() => (authStore.userData?.token ? true : false))
 const userName = computed(() => authStore.userData?.name ?? 'Guest')
+const userImage = computed(() => authStore.userData?.image ?? '')
 
 const searchingMovie = () => {}
 const signOut = () => {
@@ -88,7 +89,9 @@ const closeSearch = () => {
         class="flex items-center cursor-pointer"
         @click="router.push('/user/profile')"
       >
+        <img v-if="userImage" :src="userImage" :alt="userName" class="r-w-10 r-h-10 object-cover rounded-full mx-1 md:mx-2" />
         <UserIcon
+          v-else
           class="r-w-10 p-1 rounded-full border border-gray-400 text-gray-400 mx-1 md:mx-2"
         />
         <span class="text-gray-700 text-sm sm:text-base md:text-lg">Hi, {{ userName }}</span>

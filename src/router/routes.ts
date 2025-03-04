@@ -26,21 +26,6 @@ export const routes = [
   },
 
   {
-    path: '/theaters',
-    name: 'theater',
-    component: () => import('@/views/theater/TheaterList.vue'),
-  },
-  {
-    path: '/theater/add-theater',
-    name: 'add-owner',
-    component: () => import('@/views/theater/AddTheaters.vue'),
-  },
-  {
-    path: '/theater/edit/:id',
-    name: 'edit-theater',
-    component: () => import('@/views/theater/EditTheater.vue'),
-  },
-  {
     path: '/theater/:id',
     name: 'view-theater',
     component: () => import('@/views/owner/ViewOwner.vue'),
@@ -55,12 +40,6 @@ export const routes = [
 
 
 
-  {
-    path: '/theater/add',
-    name: 'add-theater',
-    component: () => import('@/views/theater/AddTheater.vue'),
-    meta: { header: false },
-  },
 
   // Owner
 
@@ -75,8 +54,26 @@ export const routes = [
     component: () => import('../views/owner/AddOwner.vue'),
   },
   {
-    path: '/owner/:id',
+    path: '/owner/view/:id',
     name: 'owner-detail',
     component: () => import('../views/owner/ViewOwner.vue'),
+  },
+
+  // Theater
+
+  {
+    path: '/theater',
+    name: 'theater',
+    component: () => import('../views/theater/TheaterList.vue'),
+  },
+  {
+    path: '/theater/add',
+    name: 'add-theater',
+    component: () => import('../views/theater/AddTheater.vue'),
+  },
+  {
+    path: '/theater/edit/:id',
+    name: 'edit-theater',
+    component: () => import('../views/theater/EditTheater.vue'),
   },
 ]

@@ -9,14 +9,16 @@ const requests = {
   theaterList: 'theaters',
   getTheaterDetails: 'theaters/get-detail-of-theater/', // add id
 
-  getTheater: 'auth/profile',
-  updateUserProfile: 'auth/update-profile',
-
-  addTheater: 'theaters/add-theater',
+  // ?????????????????
 
   addOwner: 'auth/register-sub-admin',
   ownerList: 'auth/sub-admins',
   ownerTheater: 'theaters',
+
+  addTheater: 'theaters/add-theater',
+
+  getUser: 'auth/profile',
+  updateUserProfile: 'auth/update-profile',
 }
 
 export default requests

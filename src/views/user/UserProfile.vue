@@ -6,6 +6,9 @@
   import Axios from "@/plugin/axios";
   import api from "@/plugin/apis";
   import toast from "@/plugin/toast";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore()
 
   const schema = yup.object({
     Name: yup.string().required().max(50),
@@ -56,6 +59,7 @@
     })
       .then(({ data }) => {
         toast.success(data?.message ?? "User Profile Updated Successfully!");
+      authStore.loginUser({...authStore.userData,...data.data})
       })
       .catch((er) => {
         toast.error(er?.response?.data?.message ?? "User Profile Can't Update!");
@@ -65,10 +69,10 @@
       });
   };
 
-  const getTheater = async () => {
+  const getUser = async () => {
     isGetting.value = true;
 
-    await Axios.get(api.getTheater)
+    await Axios.get(api.getUser)
       .then(({ data }) => {
         const res = data.data;
 
@@ -78,7 +82,7 @@
         imageUrl.value = res.image;
       })
       .catch((er) => {
-        toast.error(er?.response?.data?.message ?? "Theater Can't Load!");
+        toast.error(er?.response?.data?.message ?? "User Can't Load!");
       })
       .finally(() => {
         isGetting.value = false;
@@ -86,18 +90,18 @@
   };
 
   onMounted(() => {
-    getTheater();
+    getUser();
   });
 </script>
 
 <template>
   <div class="add-edit-form">
-    <h2>Update Theater</h2>
+    <h2>Update Your Profile</h2>
 
     <p class="loading" v-if="isGetting">
       <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
     </p>
-    <Form v-else class="edit-theater-form" @submit="updateUserProfile" :validation-schema="schema" v-slot="{ errors }">
+    <Form v-else class="edit-user-form" @submit="updateUserProfile" :validation-schema="schema" v-slot="{ errors }">
       <div class="form-flex-div">
         <label for="name">Name</label>
         <Field v-model="name" type="text" name="Name" id="name" class="input" placeholder="Enter Your Name" />
@@ -126,7 +130,7 @@
             v-if="!imageUrl" @click="file.click()" />
           <input type="file" accept="image/*" ref="file" hidden @change="handleFileUpload" />
         </label>
-        <div v-if="imageUrl" class="relative mat-5 w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24">
+        <div v-if="imageUrl" class="relative mat-5 w-20 sm:w-24 md:w-32 h-1w-20 sm:h-24 md:h-32">
           <XMarkIcon
             class="absolute w-6 sm:w-8 p-1 bg-red-500 hover:bg-red-600 cursor-pointer rounded-full -top-2 -right-2 text-white"
             @click="removeImage()" />
@@ -136,7 +140,7 @@
 
       <div>
         <button type="submit" :disabled="isLoading">
-          <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Update Theater
+          <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Update
         </button>
       </div>
     </Form>
