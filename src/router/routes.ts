@@ -26,12 +26,6 @@ export const routes = [
   },
 
   {
-    path: '/theater/:id',
-    name: 'view-theater',
-    component: () => import('@/views/owner/ViewOwner.vue'),
-  },
-
-  {
     path: '/user/profile',
     name: 'profile',
     component: () => import('../views/user/UserProfile.vue'),
@@ -74,6 +68,6 @@ export const routes = [
   {
     path: '/theater/edit/:id',
     name: 'edit-theater',
-    component: () => import('../views/theater/EditTheater.vue'),
+    component: () => import('../views/theater/AddTheater.vue'),
   },
 ]

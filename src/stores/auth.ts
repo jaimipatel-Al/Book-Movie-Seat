@@ -8,7 +8,6 @@ interface User {
   role?: string
   name?: string
   image?: string
-  isComplete?: boolean
 }
 
 export const useAuthStore = defineStore('user', () => {

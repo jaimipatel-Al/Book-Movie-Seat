@@ -59,7 +59,8 @@
         @apply text-normal text-gray-700 hover:underline cursor-pointer
     }
 
-    .add-edit-form .add-owner-form {
+    .add-edit-form .add-theater-form ,
+        .add-edit-form .add-owner-form {
         @apply w-full sm:w-2/3 md:w-1/3 m-auto
     }
 
