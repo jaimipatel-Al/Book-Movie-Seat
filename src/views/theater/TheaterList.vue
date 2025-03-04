@@ -61,10 +61,10 @@
         {{ t.name }}
       </div>
 
-      <p class="loading" v-if="isGetting">
+      <p class="loading pa-10" v-if="isGetting">
         <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
       </p>
-      <p class="loading" v-else-if="theaters.length == 0">
+      <p class="loading pa-10" v-else-if="theaters.length == 0">
         <NoSymbolIcon class="r-w-8 mr-2" />No theaters found ...
       </p>
     </div>

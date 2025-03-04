@@ -1,77 +1,79 @@
 <script setup lang="ts">
-  import { EyeIcon, EyeSlashIcon, ArrowPathIcon } from "@heroicons/vue/24/solid";
-  import { Form, Field } from "vee-validate";
-  import * as yup from "yup";
-  import { useRouter } from "vue-router";
-  import { onMounted, ref } from "vue";
-  import Axios from "@/plugin/axios";
-  import api from "@/plugin/apis";
-  import toast from "@/plugin/toast";
-  import { useAuthStore } from '@/stores/auth'
+import { EyeIcon, EyeSlashIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
+import { useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+import Axios from '@/plugin/axios'
+import api from '@/plugin/apis'
+import toast from '@/plugin/toast'
+import { useAuthStore } from '@/stores/auth'
 
-  const router = useRouter();
-  const authStore = useAuthStore()
+const router = useRouter()
+const authStore = useAuthStore()
 
-  const schema = yup.object({
-    Email: yup.string().required().email(),
-    Password: yup
-      .string()
-      .required()
-      .min(8)
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
-        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
-      ),
-  });
+const schema = yup.object({
+  Email: yup.string().required().email(),
+  Password: yup
+    .string()
+    .required()
+    .min(8)
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+      'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    ),
+})
 
-  const userName = import.meta.env.VITE_API_USER_NAME;
+const userName = import.meta.env.VITE_API_USER_NAME
 
-  const isLoading = ref(false);
-  const email = ref("");
-  const password = ref("");
-  const isPassword = ref(false);
-  const isRemember = ref(false);
+const isLoading = ref(false)
+const email = ref('')
+const password = ref('')
+const isPassword = ref(false)
+const isRemember = ref(false)
 
-  const login = async () => {
-    isLoading.value = true;
+const login = async () => {
+  isLoading.value = true
 
-    const user = {
-      email: email.value,
-      password: password.value,
-    };
+  const user = {
+    email: email.value,
+    password: password.value,
+  }
 
-    await Axios.post(api.login, user)
-      .then(({ data }) => {
-        if (isRemember.value) {
-          const user = {
-            password: password.value,
-            email: email.value,
-          };
-          sessionStorage.setItem(userName, JSON.stringify(user));
-        } else sessionStorage.removeItem(userName);
+  await Axios.post(api.login, user)
+    .then(({ data }) => {
+      if (isRemember.value) {
+        const user = {
+          password: password.value,
+          email: email.value,
+        }
+        sessionStorage.setItem(userName, JSON.stringify(user))
+      } else sessionStorage.removeItem(userName)
 
-        authStore.loginUser(data.data)
-        toast.success(data?.message ?? "User Login Success!");
-        router.push("/");
-      })
-      .catch((er) => {
-        toast.error(er?.response?.data?.message ?? "User Can't Login!");
-      })
-      .finally(() => {
-        isLoading.value = false;
-      });
-  };
+      authStore.loginUser(data.data)
+      toast.success(data?.message ?? 'User Login Success!')
 
-  onMounted(() => {
-    const authUser = sessionStorage.getItem(userName);
+      if (data.data.role == 'sub_admin' && !data.data.isComplete) router.push('/theater/add')
+      else router.push('/')
+    })
+    .catch((er) => {
+      toast.error(er?.response?.data?.message ?? "User Can't Login!")
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
+}
 
-    if (authUser) {
-      const user = JSON.parse(authUser);
-      email.value = user.email;
-      password.value = user.password;
-      isRemember.value = true;
-    }
-  });
+onMounted(() => {
+  const authUser = sessionStorage.getItem(userName)
+
+  if (authUser) {
+    const user = JSON.parse(authUser)
+    email.value = user.email
+    password.value = user.password
+    isRemember.value = true
+  }
+})
 </script>
 
 <template>
@@ -81,13 +83,25 @@
       <p class="sub-line" @click="router.push('/auth/signup')">Create New Account</p>
 
       <label for="email">Email Address</label>
-      <Field v-model="email" type="email" name="Email" id="email" class="input"
-        placeholder="Enter Your Email Address" />
+      <Field
+        v-model="email"
+        type="email"
+        name="Email"
+        id="email"
+        class="input"
+        placeholder="Enter Your Email Address"
+      />
       <p class="error-message">{{ errors?.Email }}</p>
       <label for="password">Password</label>
       <div class="input flex items-center justify-between">
-        <Field v-model="password" :type="isPassword ? 'text' : 'password'" name="Password" id="password"
-          class="w-full outline-none" placeholder="Enter Your Password" />
+        <Field
+          v-model="password"
+          :type="isPassword ? 'text' : 'password'"
+          name="Password"
+          id="password"
+          class="w-full outline-none"
+          placeholder="Enter Your Password"
+        />
         <div class="pl-2" @click="isPassword = !isPassword">
           <EyeSlashIcon v-if="isPassword" class="password-icon" />
           <EyeIcon v-else class="password-icon" />

@@ -12,6 +12,8 @@
   const route = useRoute();
   const router = useRouter();
 
+  const userName = import.meta.env.VITE_API_USER_NAME;
+
   const schema = yup.object({
     Password: yup
       .string()
@@ -45,7 +47,12 @@
     await Axios.post(api.setPassword, user)
       .then(({ data }) => {
         toast.success(data?.message ?? "Your Password Created Successfully!");
-        router.push(`/theater/edit/$`);
+        const userCred = {
+          password: password.value,
+          email: route.query.email,
+        };
+        sessionStorage.setItem(userName, JSON.stringify(userCred));
+        router.push(`/auth/login`);
       })
       .catch((er) => {
         toast.error(er?.response?.data?.message ?? "Password Can't Create!");
@@ -105,7 +112,7 @@
 <template>
   <div class="auth-form">
     <p v-if="isVerifying" class="loading text-white">
-      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+      <ArrowPathIcon class="r-w-8 mr-2" />Verifying Data ...
     </p>
     <Form v-else @submit="createPassword" :validation-schema="schema" v-slot="{ errors }">
       <h1>Create Password</h1>
