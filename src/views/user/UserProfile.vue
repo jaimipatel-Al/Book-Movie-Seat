@@ -3,12 +3,9 @@
   import { Form, Field } from "vee-validate";
   import * as yup from "yup";
   import { onMounted, ref } from "vue";
-  import { useRouter } from "vue-router";
   import Axios from "@/plugin/axios";
   import api from "@/plugin/apis";
   import toast from "@/plugin/toast";
-
-  const router = useRouter();
 
   const schema = yup.object({
     Name: yup.string().required().max(50),
@@ -49,13 +46,14 @@
   const updateUserProfile = async () => {
     isLoading.value = true;
 
-    const user = {
-      name: name.value,
-      email: email.value,
-      mobile: mobile.value,
-    };
+    const formData = new FormData();
+    formData.append("name", name.value);
+    formData.append("mobile", mobile.value);
+    if (image.value || (!imageUrl.value && !image.value)) formData.append('image', image.value ? image.value : '')
 
-    await Axios.post(api.updateUserProfile, user)
+    await Axios.put(api.updateUserProfile, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
       .then(({ data }) => {
         toast.success(data?.message ?? "User Profile Updated Successfully!");
       })
@@ -77,6 +75,7 @@
         email.value = res.email;
         name.value = res.name;
         mobile.value = res.mobile;
+        imageUrl.value = res.image;
       })
       .catch((er) => {
         toast.error(er?.response?.data?.message ?? "Theater Can't Load!");

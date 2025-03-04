@@ -2,13 +2,14 @@
   import { ArrowPathIcon, ArrowUpTrayIcon, XMarkIcon } from '@heroicons/vue/24/solid'
   import { Form, Field } from "vee-validate";
   import * as yup from "yup";
-  import { ref } from "vue";
-  import { useRouter } from "vue-router";
+  import { onMounted, ref } from "vue";
+  import { useRoute, useRouter } from "vue-router";
   import Axios from "@/plugin/axios";
   import api from "@/plugin/apis";
   import toast from "@/plugin/toast";
 
   const router = useRouter();
+  const route=useRoute();
 
   const schema = yup.object({
     Name: yup.string().required().max(50),
@@ -28,6 +29,7 @@
     City: yup.string().required(),
   });
 
+  const isGetting = ref(false);
   const isLoading = ref(false);
   const name = ref("");
   const email = ref("");
@@ -73,13 +75,40 @@
         isLoading.value = false;
       });
   };
+
+  const getTheaterDetails = async () => {
+    isGetting.value = true;
+
+    await Axios.get(`${api.getTheaterDetails}${route.params.id}`)
+      .then(({ data }) => {
+        const res = data.data;
+
+        email.value = res.email;
+        name.value = res.name;
+        mobile.value = res.mobile;
+        imageUrl.value = res.image;
+      })
+      .catch((er) => {
+        toast.error(er?.response?.data?.message ?? "Theater Can't Load!");
+      })
+      .finally(() => {
+        isGetting.value = false;
+      });
+  };
+
+  onMounted(() => {
+    getTheaterDetails();
+  });
 </script>
 
 <template>
   <div class="add-edit-form">
-    <h2>Update Theater</h2>
+    <h2>Update Theater Details</h2>
 
-    <Form class="edit-theater-form" @submit="editTheater" :validation-schema="schema" v-slot="{ errors }">
+    <p class="loading" v-if="isGetting">
+      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+    </p>
+    <Form v-else class="edit-theater-form" @submit="editTheater" :validation-schema="schema" v-slot="{ errors }">
 
       <div class="form-flex-div">
         <label for="name">Name</label>
@@ -140,7 +169,7 @@
 
       <div>
         <button type="submit" :disabled="isLoading">
-          <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Update Theater
+          <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Update
         </button>
       </div>
     </Form>

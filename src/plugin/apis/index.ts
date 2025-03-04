@@ -2,15 +2,17 @@ const requests = {
   register: 'auth/register',
   login: 'auth/login',
 
-  verifyToken :'auth/verify-reset-token/',
-  setPassword :'auth/set-password',
-  requestReset :'auth/request-reset',
+  verifyToken: 'auth/verify-reset-token/',
+  setPassword: 'auth/set-password',
+  requestReset: 'auth/request-reset',
 
+  theaterList: 'theaters',
   addTheater: 'auth/register-sub-admin',
-  editTheater: 'auth/register-sub-admin', //sdfdsdfsdfjkferjgfjhfsjhfgsdjhfgsdjhfg
-  getTheater: 'auth/profile',
+  getTheaterDetails: 'theaters/get-detail-of-theater/', // add id
+  editTheater: 'theaters/add-theater',
 
-  updateUserProfile:'auth/update-profile'
+  getTheater: 'auth/profile',
+  updateUserProfile: 'auth/update-profile',
 }
 
 export default requests
