@@ -43,3 +43,24 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+
+
+#### Credentials
+
+Customer
+```sh
+ - jaimi@gmail.com
+ - Jaimi@123
+```
+
+Owner
+```sh
+ - brameiteigudu-3989@yopmail.com
+ - Jaimi@123
+```
+
+Super Admin
+```sh
+ - bansi.albiorix@gmail.com
+ - Test@123
+```

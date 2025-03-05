@@ -63,11 +63,11 @@ export const routes = [
   {
     path: '/theater/add',
     name: 'add-theater',
-    component: () => import('../views/theater/AddTheater.vue'),
+    component: () => import('../views/theater/AddEditTheater.vue'),
   },
   {
     path: '/theater/edit/:id',
     name: 'edit-theater',
-    component: () => import('../views/theater/AddTheater.vue'),
+    component: () => import('../views/theater/AddEditTheater.vue'),
   },
 ]

@@ -8,6 +8,12 @@ import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
 
+interface City {
+  _id: string;
+  name: string;
+  state: string;
+}
+
 const router = useRouter()
 const route = useRoute()
 
@@ -35,10 +41,12 @@ const screen = ref(0)
 const image = ref()
 const imageUrl = ref()
 const file = ref()
-const cities = ref([])
+const cities = ref<City[]>([]);
 
 const handleFileUpload = (event: Event) => {
-  const file = event.target?.files?.[0] ?? ''
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0] ?? null
+
   if (file) {
     image.value = file
     imageUrl.value = URL.createObjectURL(file)
@@ -57,7 +65,7 @@ const addTheater = async () => {
   formData.append('name', name.value)
   formData.append('location', location.value)
   formData.append('city', city.value)
-  formData.append('no_of_screens', screen.value)
+  formData.append('no_of_screens', String(screen.value))
   if (image.value) formData.append('image', image.value ? image.value : '')
 
   await Axios.post(api.addTheater, formData, {
@@ -82,7 +90,7 @@ const updateTheater = async () => {
   formData.append('name', name.value)
   formData.append('location', location.value)
   formData.append('city', city.value)
-  formData.append('no_of_screens', screen.value)
+  formData.append('no_of_screens', String(screen.value))
   if (image.value || (!imageUrl.value && !image.value))
     formData.append('image', image.value ? image.value : '')
 
@@ -126,7 +134,7 @@ const getTheaterData = async () => {
       name.value = res.name
       location.value = res.location
       screen.value = res.no_of_screens
-      city.value = res.city._id
+      city.value = res.city?._id ??''
       imageUrl.value = res.image
     })
     .catch((er) => {
@@ -140,7 +148,7 @@ const getTheaterData = async () => {
 onMounted(() => {
   getCityList()
   if (route?.params?.id) {
-    theaterId.value = route?.params?.id ?? ''
+    theaterId.value = Array.isArray(route.params.id) ? route.params.id[0] : String(route.params.id);
     getTheaterData()
   }
 })
@@ -148,7 +156,10 @@ onMounted(() => {
 
 <template>
   <div class="add-edit-form">
-    <h2>{{ theaterId ? 'Update' : 'Add' }} Theater</h2>
+    <h2>
+      {{ theaterId ? 'Update' : 'Add' }} Theater
+      <span @click="router.push('/theater')"> Back To List </span>
+    </h2>
     <p class="loading" v-if="isGetting"><ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...</p>
     <Form
       v-else

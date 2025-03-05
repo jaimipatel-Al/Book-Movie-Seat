@@ -6,17 +6,17 @@ const requests = {
   setPassword: 'auth/set-password',
   requestReset: 'auth/request-reset',
 
-
-  // ?????????????????
-
   addOwner: 'auth/register-sub-admin',
   ownerList: 'auth/sub-admins',
   ownerTheater: 'theaters',
+  toggleOwnerStatus:'/auth/owner-acc-status/',// Add id
 
   addTheater: 'theaters/add-theater',
   theaterList: 'theaters',
-  getTheaterDetails: 'theaters/get-detail-of-theater/', // add id
-  updateTheater: 'theaters/update-theater/', // add id
+  getTheaterDetails: 'theaters/get-detail-of-theater/', // Add id
+  updateTheater: 'theaters/update-theater/', // Add id
+  // deleteTheater:
+  toggleTheaterStatus:'/auth/owner-acc-status/',// Add id
 
   getUser: 'auth/profile',
   updateUserProfile: 'auth/update-profile',

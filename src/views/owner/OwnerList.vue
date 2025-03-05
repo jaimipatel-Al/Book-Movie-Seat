@@ -5,12 +5,13 @@ import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
 import { onMounted, ref } from 'vue'
+import type { Owner } from '@/types/owner'
 
 const router = useRouter()
 
 const isGetting = ref(false)
 const page = ref(0)
-const owners = ref([])
+const owners = ref<Owner[]>([])
 const totalOwner = ref(0)
 const scrollComponent = ref()
 
@@ -38,6 +39,16 @@ const handleScroll = () => {
   const el = scrollComponent.value
   if (!el) return
   if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50 && !isGetting.value) getOwnerList()
+}
+
+const toggleOwnerStatus = async (id: string) => {
+  await Axios.patch(`${api.toggleOwnerStatus}${id}`)
+    .then(({ data }) => {
+      toast.success(data.message)
+    })
+    .catch((er) => {
+      toast.error(er?.response?.data?.message ?? "Owner Status Can't Change!")
+    })
 }
 
 onMounted(() => {
@@ -70,10 +81,16 @@ onMounted(() => {
         >
           <span class="t-nowrap">{{ o.email }}</span>
           <span class="t-nowrap">{{ o.mobile }}</span>
-          <!-- <label for="remember">
-        <input v-model="o.isComplete" type="checkbox" id="remember" class="w-4 h-4 cursor-pointer" />
-        Is Active Owner
-      </label> -->
+          <label for="remember">
+            <input
+              v-model="o.isActive"
+              type="checkbox"
+              id="remember"
+              class="w-4 h-4 cursor-pointer"
+              @change="toggleOwnerStatus(o._id)"
+            />
+            Is Active Owner
+          </label>
         </p>
         <!-- <p v-if="!o.isComplete" class="error-message mat-5">Not completed yet !!</p> -->
       </div>

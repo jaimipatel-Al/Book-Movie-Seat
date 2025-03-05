@@ -89,7 +89,12 @@ const closeSearch = () => {
         class="flex items-center cursor-pointer"
         @click="router.push('/user/profile')"
       >
-        <img v-if="userImage" :src="userImage" :alt="userName" class="r-w-10 r-h-10 object-cover rounded-full mx-1 md:mx-2" />
+        <img
+          v-if="userImage"
+          :src="userImage"
+          :alt="userName"
+          class="r-w-10 r-h-10 object-cover rounded-full mx-1 md:mx-2"
+        />
         <UserIcon
           v-else
           class="r-w-10 p-1 rounded-full border border-gray-400 text-gray-400 mx-1 md:mx-2"
@@ -127,8 +132,14 @@ const closeSearch = () => {
                 <ChevronDoubleRightIcon class="w-2 sm:w-3 mx-1" />
               </p>
             </h2>
+            <img
+              v-if="userImage && isLogin"
+              :src="userImage"
+              :alt="userName"
+              class="r-w-10 r-h-10 object-cover rounded-full mx-2"
+            />
             <UserIcon
-              v-if="isLogin"
+              v-else-if="isLogin"
               class="r-w-10 p-1 rounded-full border border-gray-400 text-gray-400 mx-2"
             />
           </li>
