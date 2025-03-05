@@ -6,6 +6,9 @@ const requests = {
   setPassword: 'auth/set-password',
   requestReset: 'auth/request-reset',
 
+  getUser: 'auth/profile',
+  updateUserProfile: 'auth/update-profile',
+
   addOwner: 'auth/register-sub-admin',
   ownerList: 'auth/sub-admins',
   ownerTheater: 'theaters',
@@ -17,9 +20,6 @@ const requests = {
   updateTheater: 'theaters/update-theater/', // Add id
   deleteTheater: '/theaters/delete-theater/', // Add id
   toggleTheaterStatus: '/auth/owner-acc-status/', // Add id
-
-  getUser: 'auth/profile',
-  updateUserProfile: 'auth/update-profile',
 
   cityList: 'cities/list-cities',
 }

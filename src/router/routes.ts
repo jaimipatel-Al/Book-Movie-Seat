@@ -70,4 +70,9 @@ export const routes = [
     name: 'edit-theater',
     component: () => import('../views/theater/AddEditTheater.vue'),
   },
+  {
+    path: '/theater/view/:id',
+    name: 'theater-detail',
+    component: () => import('@/views/theater/ViewTheater.vue'),
+  },
 ]

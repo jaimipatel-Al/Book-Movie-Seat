@@ -106,7 +106,7 @@ onMounted(() => {
               <h2 class="flex justify-between w-full">
                 <span
                   class="r-text-2xl text-gray-700 cursor-pointer hover:underline"
-                  @click="router.push(`/owner/view/${t._id}`)"
+                  @click="router.push(`/theater/view/${t._id}`)"
                   >{{ t.name }}</span
                 >
                 <div class="flex">

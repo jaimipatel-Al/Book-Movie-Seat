@@ -92,7 +92,6 @@ onMounted(() => {
             Is Active Owner
           </label>
         </p>
-        <!-- <p v-if="!o.isComplete" class="error-message mat-5">Not completed yet !!</p> -->
       </div>
 
       <p class="loading pa-10" v-if="isGetting">
