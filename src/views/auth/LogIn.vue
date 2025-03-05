@@ -3,7 +3,7 @@ import { EyeIcon, EyeSlashIcon, ArrowPathIcon } from '@heroicons/vue/24/solid'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import { useRouter } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
@@ -24,7 +24,7 @@ const schema = yup.object({
     ),
 })
 
-const userName = import.meta.env.VITE_API_USER_NAME
+const userName = computed(() => authStore.userName)
 
 const isLoading = ref(false)
 const email = ref('')
@@ -47,8 +47,8 @@ const login = async () => {
           password: password.value,
           email: email.value,
         }
-        sessionStorage.setItem(userName, JSON.stringify(user))
-      } else sessionStorage.removeItem(userName)
+        sessionStorage.setItem(userName.value, JSON.stringify(user))
+      } else sessionStorage.removeItem(userName.value)
 
       authStore.loginUser(data.data)
       toast.success(data?.message ?? 'User Login Success!')
@@ -64,7 +64,7 @@ const login = async () => {
 }
 
 onMounted(() => {
-  const authUser = sessionStorage.getItem(userName)
+  const authUser = sessionStorage.getItem(userName.value)
 
   if (authUser) {
     const user = JSON.parse(authUser)
