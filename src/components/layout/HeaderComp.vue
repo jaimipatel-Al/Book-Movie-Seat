@@ -7,59 +7,59 @@ import {
   FilmIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-} from '@heroicons/vue/24/solid'
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import toast from '@/plugin/toast'
+} from "@heroicons/vue/24/solid";
+import { computed, ref } from "vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+import toast from "@/plugin/toast";
 
-const router = useRouter()
-const authStore = useAuthStore()
+const router = useRouter();
+const authStore = useAuthStore();
 
 const menus = [
   {
-    isShow: authStore?.userData?.role == 'super_admin',
-    title: 'Owners',
-    page: '/owner',
+    isShow: authStore?.userData?.role == "super_admin",
+    title: "Owners",
+    page: "/owner",
   },
   {
-    isShow: authStore?.userData?.role == 'sub_admin',
-    title: 'Theaters',
-    page: '/theater',
+    isShow: authStore?.userData?.role == "sub_admin",
+    title: "Theaters",
+    page: "/theater",
   },
-]
+];
 
-const searchMovie = ref('')
+const searchMovie = ref("");
 
-const isLogin = computed(() => (authStore.userData?.token ? true : false))
-const userName = computed(() => authStore.userData?.name ?? 'Guest')
-const userImage = computed(() => authStore.userData?.image ?? '')
+const isLogin = computed(() => (authStore.userData?.token ? true : false));
+const userName = computed(() => authStore.userData?.name ?? "Guest");
+const userImage = computed(() => authStore.userData?.image ?? "");
 
-const searchingMovie = () => {}
+const searchingMovie = () => {};
 const signOut = () => {
-  authStore.logOut()
-  toast.success('User Logged Out successfully')
-  router.push('/auth/login')
-}
+  authStore.logOut();
+  toast.success("User Logged Out successfully");
+  router.push("/auth/login");
+};
 
 const openSidebar = () => {
-  document.getElementById('sidebar')?.classList.add('open')
-  document.getElementById('overlay')?.classList.add('active')
-}
+  document.getElementById("sidebar")?.classList.add("open");
+  document.getElementById("overlay")?.classList.add("active");
+};
 const closeSidebar = () => {
   setTimeout(() => {
-    document.getElementById('sidebar')?.classList.remove('open')
-    document.getElementById('overlay')?.classList.remove('active')
-  }, 200)
-}
+    document.getElementById("sidebar")?.classList.remove("open");
+    document.getElementById("overlay")?.classList.remove("active");
+  }, 200);
+};
 const openSearch = () => {
-  document.getElementById('searchbar')?.classList.add('open')
-}
+  document.getElementById("searchbar")?.classList.add("open");
+};
 const closeSearch = () => {
   setTimeout(() => {
-    document.getElementById('searchbar')?.classList.remove('open')
-  }, 200)
-}
+    document.getElementById("searchbar")?.classList.remove("open");
+  }, 200);
+};
 </script>
 
 <template>
@@ -72,7 +72,9 @@ const closeSearch = () => {
         <img src="@/assets/img/icon.svg" alt="Logo" class="w-8 sm:w-10 md:w-12" />
         <h1 class="mx-1">Book<span class="italic text-blue-700">Movie</span>Seat</h1>
       </div>
-      <div class="hidden sm:flex r-space-x-3 border border-gray-400 rounded-xl w-72 md:w-96">
+      <div
+        class="hidden sm:flex r-space-x-3 border border-gray-400 rounded-xl w-72 md:w-96"
+      >
         <MagnifyingGlassIcon class="w-5 md:w-6 text-gray-500 mx-1 md:mx-2" />
         <input
           v-model="searchMovie"
@@ -99,7 +101,9 @@ const closeSearch = () => {
           v-else
           class="r-w-10 p-1 rounded-full border border-gray-400 text-gray-400 mx-1 md:mx-2"
         />
-        <span class="text-gray-700 text-sm sm:text-base md:text-lg">Hi, {{ userName }}</span>
+        <span class="text-gray-700 text-sm sm:text-base md:text-lg ellipsis-name"
+          >Hi, {{ userName }}</span
+        >
       </div>
       <button v-else class="blue-btn text-normal" @click="router.push('/auth/signup')">
         Sign Up
@@ -121,7 +125,9 @@ const closeSearch = () => {
                 <ChevronLeftIcon
                   class="block sm:hidden w-6 p-1 hover:bg-slate-200 rounded-full mr-1"
                 />
-                Hey{{ isLogin ? `, ${userName}` : '!' }}
+                <span class="sidebar-ellipsis-name">
+                  Hey{{ isLogin ? `, ${userName}` : "!" }}
+                </span>
               </p>
               <p
                 v-if="isLogin"
@@ -145,10 +151,15 @@ const closeSearch = () => {
           </li>
           <li v-if="!isLogin">
             <div class="flex items-center text-gray-600 text-normal">
-              <FilmIcon class="p-1 sm:p-2 w-10 sm:w-12 border rounded-full mr-1 sm:mr-2" />
+              <FilmIcon
+                class="p-1 sm:p-2 w-10 sm:w-12 border rounded-full mr-1 sm:mr-2"
+              />
               Secure Your Seat: Book Your Movie Ticket Now!
             </div>
-            <button class="blue-outline text-normal t-nowrap" @click="router.push('/auth/login')">
+            <button
+              class="blue-outline text-normal t-nowrap"
+              @click="router.push('/auth/login')"
+            >
               Sign Up
             </button>
           </li>
@@ -156,17 +167,24 @@ const closeSearch = () => {
           <template v-for="i in menus" :key="i.page">
             <li v-if="i.isShow" @click="router.push(i.page)">
               {{ i.title }}
-              <ChevronRightIcon class="r-w-8 p-1 rounded-full cursor-pointer hover:bg-slate-200" />
+              <ChevronRightIcon
+                class="r-w-8 p-1 rounded-full cursor-pointer hover:bg-slate-200"
+              />
             </li>
           </template>
         </ul>
-        <button v-if="isLogin" class="blue-outline ma-5" @click="signOut()">Sign Out</button>
+        <button v-if="isLogin" class="blue-outline ma-5" @click="signOut()">
+          Sign Out
+        </button>
       </div>
     </nav>
 
     <div class="searchbar" id="searchbar">
       <div class="flex r-space-x-3 border-b">
-        <ChevronLeftIcon class="w-10 px-2 text-gray-900 mr-5 cursor-pointer" @click="closeSearch" />
+        <ChevronLeftIcon
+          class="w-10 px-2 text-gray-900 mr-5 cursor-pointer"
+          @click="closeSearch"
+        />
         <MagnifyingGlassIcon class="w-6 text-gray-500" />
         <input
           v-model="searchMovie"
@@ -226,18 +244,29 @@ const closeSearch = () => {
   z-index: 10;
 }
 
-@media screen and (max-width: 640px) {
-  .sidebar {
-    right: -200px;
-    width: 200px;
-    max-width: 100vw;
-  }
+.sidebar-ellipsis-name {
+  white-space: nowrap;
+  width: 350px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media screen and (max-width: 768px) {
   .sidebar {
     right: -300px;
     width: 300px;
+    max-width: 100vw;
+  }
+
+  .ellipsis-name {
+    white-space: nowrap;
+    width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sidebar-ellipsis-name {
+    width: 220px;
   }
 }
 </style>

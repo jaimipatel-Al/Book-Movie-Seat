@@ -41,7 +41,7 @@ const handleScroll = () => {
   if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50 && !isGetting.value) getOwnerList()
 }
 
-const toggleOwnerStatus = async (id: string) => {
+const toggleOwnerStatus = async (id?: string) => {
   await Axios.patch(`${api.toggleOwnerStatus}${id}`)
     .then(({ data }) => {
       toast.success(data.message)

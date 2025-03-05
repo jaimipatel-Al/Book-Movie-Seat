@@ -68,7 +68,7 @@ const handleScroll = () => {
   if (el.scrollHeight - el.scrollTop <= el.clientHeight + 50 && !isGetting.value) getTheaterList()
 }
 
-const toggleTheaterStatus = async (id: string) => {
+const toggleTheaterStatus = async (id?: string) => {
   await Axios.patch(`${api.toggleTheaterStatus}${id}`)
     .then(({ data }) => {
       toast.success(data.message)
@@ -102,7 +102,7 @@ onMounted(() => {
               class="w-full sm:w-1/3 h-full sm:h-32 object-cover"
             />
             <FilmIcon v-else class="w-1/3 pax-10 hidden sm:block" />
-            <div class="w-2/3">
+            <div class="w-full sm:w-2/3">
               <h2 class="flex justify-between w-full">
                 <span
                   class="r-text-2xl text-gray-700 cursor-pointer hover:underline"
@@ -112,15 +112,15 @@ onMounted(() => {
                 <div class="flex">
                   <ArrowPathIcon
                     v-if="t.isDeleting"
-                    class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-1 text-red-600"
+                    class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-0.5 sm:p-1 text-red-600"
                   />
                   <TrashIcon
                     v-else
-                    class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-1 text-red-600"
+                    class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-0.5 sm:p-1 text-red-600"
                     @click="deleteTheater(t)"
                   />
                   <PencilIcon
-                    class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-1 text-green-600"
+                    class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-0.5 sm:p-1 text-green-600"
                     @click="router.push(`/theater/edit/${t._id}`)"
                   />
                 </div>
@@ -129,7 +129,7 @@ onMounted(() => {
                 {{ t.location }}
                 <span class="px-3 md:px-5">{{ `${t.city?.name}, ${t.city?.state}` }}</span>
               </p>
-              <label for="remember">
+              <label for="remember" class="text-normal">
                 <input
                   v-model="t.isActive"
                   type="checkbox"

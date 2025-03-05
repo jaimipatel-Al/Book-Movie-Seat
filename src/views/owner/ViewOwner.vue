@@ -14,7 +14,7 @@ const route = useRoute()
 const isGetting = ref(false)
 const page = ref(0)
 const theaters = ref<Theater[]>([])
-const owners = ref<Owner>({})
+const owner = ref<Owner>({})
 const totalTheaters = ref(0)
 const scrollComponent = ref()
 
@@ -27,7 +27,7 @@ const ownerTheater = async () => {
   await Axios.get(`${api.ownerTheater}?page=${page.value}&limit=8&ownerId=${route.params.id}`)
     .then(({ data }) => {
       const res = data.data
-      owners.value = res.owner
+      owner.value = res.owner
       theaters.value = res.theaters
       totalTheaters.value = res.total
     })
@@ -59,33 +59,33 @@ onMounted(() => {
     >
       <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back To List
     </p>
-    <div class="owner-detail">
-      <img v-if="owners.image" :src="owners.image" :alt="owners.name" />
+    <div v-if="owner._id" class="owner-detail">
+      <img v-if="owner.image" :src="owner.image" :alt="owner.name" />
       <table>
         <tr>
           <td colspan="2">
-            <h2 class="r-text-3xl">{{ owners.name }}</h2>
+            <h2 class="r-text-3xl">{{ owner.name }}</h2>
           </td>
         </tr>
         <tr>
           <td class="font-semibold">Email</td>
-          <td>{{ owners.email }}</td>
+          <td>{{ owner.email }}</td>
         </tr>
         <tr>
           <td class="font-semibold">Mobile</td>
-          <td>{{ owners.mobile }}</td>
+          <td>{{ owner.mobile }}</td>
         </tr>
         <tr>
-          <td colspan="2" v-if="!owners.isActive" class="error-message">Not Active yet !!</td>
+          <td colspan="2" v-if="!owner.isActive" class="error-message">Not Active yet !!</td>
         </tr>
       </table>
     </div>
 
     <!-- theaters -->
-    <h2 class="r-text-2xl text-center underline text-gray-800 mat-5">Theater</h2>
-    <div ref="scrollComponent" class="h-4/6 overflow-y-auto px-5 md:px-0">
-      <div class="w-full md:mx-auto sm:flex flex-wrap justify-between items-center">
-        <div v-for="t in theaters" :key="t._id" class="w-full md:w-1/3 pa-5">
+    <h2 v-if="owner._id" class="r-text-2xl text-center underline text-gray-800 mat-5">Theater</h2>
+    <div ref="scrollComponent" class="h-4/6 overflow-y-auto">
+      <div class="w-full md:mx-auto flex flex-wrap justify-between items-center">
+        <div v-for="t in theaters" :key="t._id" class="w-1/2 md:w-1/3 pa-5">
           <div class="pa-5 border rounded-xl shadow-md flex flex-col sm:flex-row sm:space-x-4">
             <img
               v-if="t.image"
@@ -93,7 +93,7 @@ onMounted(() => {
               :alt="t.name"
               class="w-full sm:w-1/3 h-full sm:h-24 object-cover"
             />
-            <FilmIcon v-else class="w-1/3 pax-5 hidden sm:block" />
+            <FilmIcon v-else class="w-32 sm:w-1/3 pax-5" />
             <div class="w-2/3">
               <h2
                 class="text-normal-base font-semibold text-gray-700 cursor-pointer hover:underline"

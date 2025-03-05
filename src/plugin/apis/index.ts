@@ -19,7 +19,7 @@ const requests = {
   getTheaterDetails: 'theaters/get-detail-of-theater/', // Add id
   updateTheater: 'theaters/update-theater/', // Add id
   deleteTheater: '/theaters/delete-theater/', // Add id
-  toggleTheaterStatus: '/auth/owner-acc-status/', // Add id
+  toggleTheaterStatus: '/theaters/status/', // Add id
 
   cityList: 'cities/list-cities',
 }
