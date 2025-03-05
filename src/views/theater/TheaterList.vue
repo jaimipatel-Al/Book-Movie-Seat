@@ -31,7 +31,7 @@ const getTheaterList = async () => {
     .then(({ data }) => {
       const res = data.data
       theaters.value =
-        res.theaters?.map((e:Theater) => {
+        res.theaters?.map((e: Theater) => {
           return { ...e, isDeleting: false }
         }) ?? []
       totalTheaters.value = res.total
@@ -44,8 +44,22 @@ const getTheaterList = async () => {
     })
 }
 
-const deleteTheater = (val:Theater) => {
+const deleteTheater = async (val: Theater) => {
   val.isDeleting = true
+
+  await Axios.delete(`${api.deleteTheater}${val._id}`)
+    .then(({ data }) => {
+      toast.success(data.message ?? 'Theater deleted successfully.')
+      page.value = 0
+      theaters.value = []
+      getTheaterList()
+    })
+    .catch((er) => {
+      toast.error(er?.response?.data?.message ?? "Theaters Can't Deleted!")
+    })
+    .finally(() => {
+      val.isDeleting = false
+    })
 }
 
 const handleScroll = () => {
