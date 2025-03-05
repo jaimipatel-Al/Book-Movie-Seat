@@ -9,4 +9,5 @@ export interface Theater {
   image?: string
   isActive?: boolean
   isDeleting?: boolean
+  no_of_screens?:number
 }

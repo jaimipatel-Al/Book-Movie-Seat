@@ -9,9 +9,9 @@ import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
 
 interface City {
-  _id: string;
-  name: string;
-  state: string;
+  _id: string
+  name: string
+  state: string
 }
 
 const router = useRouter()
@@ -41,7 +41,7 @@ const screen = ref(0)
 const image = ref()
 const imageUrl = ref()
 const file = ref()
-const cities = ref<City[]>([]);
+const cities = ref<City[]>([])
 
 const handleFileUpload = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -73,7 +73,7 @@ const addTheater = async () => {
   })
     .then(({ data }) => {
       toast.success(data?.message ?? 'Theater Added Successfully!')
-      router.push('/theater')
+      router.push(`/theater/view/${data.data._id}`)
     })
     .catch((er) => {
       toast.error(er?.response?.data?.message ?? "Theater Can't Add!")
@@ -118,7 +118,7 @@ const getCityList = async () => {
       cities.value = res
     })
     .catch((er) => {
-      toast.error(er?.response?.data?.message ?? "User Can't Load!")
+      toast.error(er?.response?.data?.message ?? "Cities Data Can't Load!")
     })
     .finally(() => {
       isGettingCity.value = false
@@ -134,7 +134,7 @@ const getTheaterData = async () => {
       name.value = res.name
       location.value = res.location
       screen.value = res.no_of_screens
-      city.value = res.city?._id ??''
+      city.value = res.city?._id ?? ''
       imageUrl.value = res.image
     })
     .catch((er) => {
@@ -148,7 +148,7 @@ const getTheaterData = async () => {
 onMounted(() => {
   getCityList()
   if (route?.params?.id) {
-    theaterId.value = Array.isArray(route.params.id) ? route.params.id[0] : String(route.params.id);
+    theaterId.value = Array.isArray(route.params.id) ? route.params.id[0] : String(route.params.id)
     getTheaterData()
   }
 })
@@ -213,8 +213,17 @@ onMounted(() => {
         name="Screen"
         id="screen"
         class="input"
-        placeholder="Enter Your Screen"
+        placeholder="Enter No. Of Screen"
+        :disabled="theaterId?.length"
       />
+      <p v-if="theaterId" class="text-xs sm:text-sm text-green-700">
+        You can't edit no. of screen from here.
+        <span
+          class="hover:underline font-semibold cursor-pointer"
+          @click="router.push(`/theater/view/${theaterId}`)"
+          >Manage Screen</span
+        >
+      </p>
       <p class="error-message">{{ errors?.Screen }}</p>
 
       <div class="block w-full">

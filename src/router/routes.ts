@@ -25,15 +25,13 @@ export const routes = [
     meta: { header: false, auth: false },
   },
 
+  // user
+
   {
     path: '/user/profile',
     name: 'profile',
     component: () => import('../views/user/UserProfile.vue'),
   },
-
-
-
-
 
   // Owner
 
@@ -74,5 +72,18 @@ export const routes = [
     path: '/theater/view/:id',
     name: 'theater-detail',
     component: () => import('@/views/theater/ViewTheater.vue'),
+  },
+
+  // screen
+
+  {
+    path: '/screen/add',
+    name: 'add-screen',
+    component: () => import('../views/screen/AddEditScreen.vue'),
+  },
+  {
+    path: '/screen/edit/:id',
+    name: 'edit-screen',
+    component: () => import('../views/screen/AddEditScreen.vue'),
   },
 ]

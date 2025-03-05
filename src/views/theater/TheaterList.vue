@@ -55,7 +55,7 @@ const deleteTheater = async (val: Theater) => {
       getTheaterList()
     })
     .catch((er) => {
-      toast.error(er?.response?.data?.message ?? "Theaters Can't Deleted!")
+      toast.error(er?.response?.data?.message ?? "Theater Can't Deleted!")
     })
     .finally(() => {
       val.isDeleting = false
@@ -74,7 +74,7 @@ const toggleTheaterStatus = async (id?: string) => {
       toast.success(data.message)
     })
     .catch((er) => {
-      toast.error(er?.response?.data?.message ?? "Theaters Status Can't Change!")
+      toast.error(er?.response?.data?.message ?? "Theater Status Can't Change!")
     })
 }
 
