@@ -59,8 +59,8 @@
         @apply text-normal text-gray-700 hover:underline cursor-pointer
     }
 
-    .add-edit-form .add-theater-form ,
-        .add-edit-form .add-owner-form {
+    .add-edit-form .add-theater-form,
+    .add-edit-form .add-owner-form {
         @apply w-full sm:w-2/3 md:w-1/3 m-auto
     }
 
@@ -80,15 +80,17 @@
         @apply blue-btn w-full mat-5 text-normal-base
     }
 
-    .owner-detail,.theater-detail{
-       @apply flex items-center justify-center sm:space-x-4 pay-5 px-1 sm:px-0
+    .owner-detail, .theater-detail {
+        @apply flex items-center justify-center sm:space-x-4 pay-5 px-1 sm:px-0
     }
+
     .theater-detail td,
-    .owner-detail td{
-        @apply text-normal py-1 sm:py-2 px-1.5 sm:px-3 m-auto 
+    .owner-detail td {
+        @apply text-normal py-1 sm:py-2 px-1.5 sm:px-3 m-auto
     }
-.theater-detail img,
-    .owner-detail img{
+
+    .theater-detail img,
+    .owner-detail img {
         @apply w-52 sm:w-64 md:w-72 h-52 sm:h-64 md:h-72 object-cover
     }
 }

@@ -70,8 +70,13 @@ export const routes = [
   },
   {
     path: '/theater/view/:id',
-    name: 'theater-detail',
+    name: 'theater-view',
     component: () => import('@/views/theater/ViewTheater.vue'),
+  },
+  {
+    path: '/theater/detail/:id',
+    name: 'theater-detail',
+    component: () => import('../views/theater/DetailTheater.vue'),
   },
 
   // screen

@@ -97,6 +97,7 @@ onMounted(() => {
             <div class="w-2/3">
               <h2
                 class="text-normal-base font-semibold text-gray-700 cursor-pointer hover:underline"
+                @click="router.push(`/theater/detail/${t._id}`)"
               >
                 {{ t.name }}
               </h2>
