@@ -7,6 +7,7 @@ import { computed, onMounted, ref } from 'vue'
 import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
+import swal from '@/plugin/sweetalert'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
@@ -53,7 +54,18 @@ const login = async () => {
       authStore.loginUser(data.data)
       toast.success(data?.message ?? 'User Login Success!')
 
-      router.push('/')
+      if (data.data.role == 'sub_admin' && !data.data.isActive) {
+        swal
+          .fire({
+            title: 'Deactivate Account',
+            text: 'Your account is deactivated by system.',
+            icon: 'warning',
+            showCancelButton: false,
+          })
+          .then((result) => {
+            if (result.isConfirmed) router.push('/')
+          })
+      } else router.push('/')
     })
     .catch((er) => {
       toast.error(er?.response?.data?.message ?? "User Can't Login!")
