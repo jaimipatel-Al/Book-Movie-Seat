@@ -24,11 +24,12 @@ const ownerTheater = async () => {
   page.value++
   isGetting.value = true
 
-  await Axios.get(`${api.ownerTheater}?page=${page.value}&limit=8&ownerId=${route.params.id}`)
+  await Axios.get(`${api.ownerTheater}?page=${page.value}&limit=15&ownerId=${route.params.id}`)
     .then(({ data }) => {
       const res = data.data
       owner.value = res.owner
-      theaters.value = res.theaters
+      const arr = [...theaters.value, ...res.theaters]
+      theaters.value = [...arr]
       totalTheaters.value = res.total
     })
     .catch((er) => {
@@ -47,7 +48,7 @@ const handleScroll = () => {
 
 onMounted(() => {
   ownerTheater()
-  scrollComponent.value.addEventListener('scroll', handleScroll)
+  scrollComponent.value?.addEventListener('scroll', handleScroll)
 })
 </script>
 
@@ -82,8 +83,13 @@ onMounted(() => {
     </div>
 
     <!-- theaters -->
-    <h2 v-if="owner._id" class="r-text-2xl text-center underline text-gray-800 mat-5">Theater</h2>
-    <div ref="scrollComponent" class="h-4/6 overflow-y-auto">
+    <h2 v-if="owner._id" class="r-text-2xl text-center underline text-gray-800 pay-5">Theater</h2>
+    <div
+      v-show="theaters?.length"
+      ref="scrollComponent"
+      class="overflow-y-auto"
+      style="height: 75vh"
+    >
       <div class="w-full md:mx-auto flex flex-wrap justify-between items-center">
         <div v-for="t in theaters" :key="t._id" class="w-1/2 md:w-1/3 pa-5">
           <div class="pa-5 border rounded-xl shadow-md flex flex-col sm:flex-row sm:space-x-4">
@@ -110,13 +116,13 @@ onMounted(() => {
           </div>
         </div>
       </div>
-
-      <p class="loading pa-10" v-if="isGetting">
-        <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
-      </p>
-      <p class="loading pa-10" v-else-if="theaters.length == 0">
-        <NoSymbolIcon class="r-w-8 mr-2" />No theaters added ...
-      </p>
     </div>
+
+    <p class="loading pa-10" v-if="isGetting">
+      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+    </p>
+    <p class="loading pa-10" v-else-if="theaters.length == 0">
+      <NoSymbolIcon class="r-w-8 mr-2" />No theaters added ...
+    </p>
   </div>
 </template>

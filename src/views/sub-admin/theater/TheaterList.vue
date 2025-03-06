@@ -27,13 +27,16 @@ const getTheaterList = async () => {
   page.value++
   isGetting.value = true
 
-  await Axios.get(`${api.theaterList}?page=${page.value}&limit=8`)
+  await Axios.get(`${api.theaterList}?page=${page.value}&limit=10`)
     .then(({ data }) => {
       const res = data.data
-      theaters.value =
-        res.theaters?.map((e: Theater) => {
+      const arr = [
+        ...theaters.value,
+        ...(res.theaters?.map((e: Theater) => {
           return { ...e, isDeleting: false }
-        }) ?? []
+        }) ?? []),
+      ]
+      theaters.value = [...arr]
       totalTheaters.value = res.total
     })
     .catch((er) => {
@@ -91,7 +94,7 @@ onMounted(() => {
       <button class="blue-outline" @click="router.push('/theater/add')">Add Theater</button>
     </div>
 
-    <div ref="scrollComponent" class="h-5/6 overflow-y-auto px-5 md:px-0">
+    <div class="px-5 md:px-0 overflow-y-auto" ref="scrollComponent" style="height: 75vh">
       <div class="w-full md:w-11/12 md:mx-auto sm:flex flex-wrap justify-between items-center">
         <div v-for="t in theaters" :key="t._id" class="w-full md:w-1/2 pa-5">
           <div class="pa-5 border rounded-xl shadow-md flex flex-col sm:flex-row sm:space-x-4">

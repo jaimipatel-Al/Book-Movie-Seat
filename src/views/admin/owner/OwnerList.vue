@@ -16,6 +16,8 @@ const totalOwner = ref(0)
 const scrollComponent = ref()
 
 const getOwnerList = async () => {
+  console.log(page.value == 0, owners.value.length, totalOwner.value)
+
   if (page.value !== 0 && owners.value?.length == totalOwner.value) return
 
   page.value++
@@ -24,7 +26,8 @@ const getOwnerList = async () => {
   await Axios.get(`${api.ownerList}?page=${page.value}&limit=8`)
     .then(({ data }) => {
       const res = data.data
-      owners.value = res.subAdmins
+      const arr = [...owners.value, ...res.subAdmins]
+      owners.value = [...arr]
       totalOwner.value = res.total
     })
     .catch((er) => {
@@ -64,11 +67,11 @@ onMounted(() => {
       <button class="blue-outline" @click="router.push('/owner/add')">Add Owner</button>
     </div>
 
-    <div ref="scrollComponent" class="h-5/6 overflow-y-auto px-5 md:px-0">
+    <div ref="scrollComponent" class="px-5 md:px-0 overflow-y-auto" style="height: 75vh">
       <div
         v-for="o in owners"
         :key="o._id"
-        class="pa-5 border rounded-xl shadow-md w-full md:w-2/3 my-5 md:mx-auto"
+        class="pa-5 border rounded-xl shadow-md w-full md:w-2/3 mb-2 sm:mb-3 md:mb-4 md:mx-auto"
       >
         <h2
           class="r-text-2xl text-gray-700 cursor-pointer hover:underline"
