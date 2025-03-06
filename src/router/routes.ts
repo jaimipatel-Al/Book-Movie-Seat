@@ -6,6 +6,8 @@ export const routes = [
     meta: { auth: false },
   },
 
+  // Auth
+
   {
     path: '/auth/signup',
     name: 'signup',
@@ -25,7 +27,7 @@ export const routes = [
     meta: { header: false, auth: false },
   },
 
-  // user
+  // User
 
   {
     path: '/user/profile',
@@ -38,17 +40,17 @@ export const routes = [
   {
     path: '/owner',
     name: 'owner',
-    component: () => import('../views/owner/OwnerList.vue'),
+    component: () => import('../views/admin/owner/OwnerList.vue'),
   },
   {
     path: '/owner/add',
     name: 'add-owner',
-    component: () => import('../views/owner/AddOwner.vue'),
+    component: () => import('../views/admin/owner/AddOwner.vue'),
   },
   {
     path: '/owner/view/:id',
     name: 'owner-detail',
-    component: () => import('../views/owner/ViewOwner.vue'),
+    component: () => import('../views/admin/owner/ViewOwner.vue'),
   },
 
   // Theater
@@ -56,27 +58,27 @@ export const routes = [
   {
     path: '/theater',
     name: 'theater',
-    component: () => import('../views/theater/TheaterList.vue'),
+    component: () => import('../views/sub-admin/theater/TheaterList.vue'),
   },
   {
     path: '/theater/add',
     name: 'add-theater',
-    component: () => import('../views/theater/AddEditTheater.vue'),
+    component: () => import('../views/sub-admin/theater/AddEditTheater.vue'),
   },
   {
     path: '/theater/edit/:id',
     name: 'edit-theater',
-    component: () => import('../views/theater/AddEditTheater.vue'),
+    component: () => import('../views/sub-admin/theater/AddEditTheater.vue'),
   },
   {
     path: '/theater/view/:id',
-    name: 'theater-view',
-    component: () => import('../views/theater/OwnerViewTheater.vue'),
+    name: 'owner-theater-view',
+    component: () => import('../views/sub-admin/theater/ViewTheater.vue'),
   },
   {
     path: '/theater/detail/:id',
-    name: 'theater-detail',
-    component: () => import('../views/theater/DetailTheater.vue'),
+    name: 'admin-theater-detail',
+    component: () => import('../views/admin/theater/ViewTheater.vue'),
   },
 
   // screen
@@ -84,11 +86,11 @@ export const routes = [
   {
     path: '/screen/add',
     name: 'add-screen',
-    component: () => import('../views/screen/AddEditScreen.vue'),
+    component: () => import('../views/sub-admin/screen/AddEditScreen.vue'),
   },
   {
     path: '/screen/edit/:id',
     name: 'edit-screen',
-    component: () => import('../views/screen/AddEditScreen.vue'),
+    component: () => import('../views/sub-admin/screen/AddEditScreen.vue'),
   },
 ]
