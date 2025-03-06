@@ -100,8 +100,13 @@ onMounted(() => {
               :src="t.image"
               :alt="t.name"
               class="w-full sm:w-1/3 h-full sm:h-32 object-cover"
+              @click="router.push(`/theater/view/${t._id}`)"
             />
-            <FilmIcon v-else class="w-1/3 pax-10 hidden sm:block" />
+            <FilmIcon
+              v-else
+              class="w-1/3 pax-10 hidden sm:block"
+              @click="router.push(`/theater/view/${t._id}`)"
+            />
             <div class="w-full sm:w-2/3">
               <h2 class="flex justify-between w-full">
                 <span

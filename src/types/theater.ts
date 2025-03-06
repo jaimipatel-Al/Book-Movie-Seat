@@ -9,5 +9,8 @@ export interface Theater {
   image?: string
   isActive?: boolean
   isDeleting?: boolean
-  no_of_screens?:number
+  no_of_screens?: number
+  ownerId?: {
+    _id?: string
+  }
 }

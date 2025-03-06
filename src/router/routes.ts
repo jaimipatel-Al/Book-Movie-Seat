@@ -71,7 +71,7 @@ export const routes = [
   {
     path: '/theater/view/:id',
     name: 'theater-view',
-    component: () => import('@/views/theater/ViewTheater.vue'),
+    component: () => import('../views/theater/OwnerViewTheater.vue'),
   },
   {
     path: '/theater/detail/:id',

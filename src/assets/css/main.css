@@ -89,9 +89,9 @@
         @apply text-normal py-1 sm:py-2 px-1.5 sm:px-3 m-auto
     }
 
-    .theater-detail img,
-    .owner-detail img {
-        @apply w-52 sm:w-64 md:w-72 h-52 sm:h-64 md:h-72 object-cover
+    .owner-detail img,
+    .theater-detail img {
+        @apply w-40 sm:w-52 md:w-72 h-40 sm:h-52 md:h-72 object-cover
     }
 }
 

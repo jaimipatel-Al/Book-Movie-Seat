@@ -116,8 +116,8 @@ onMounted(() => {
       <p class="loading pa-10" v-if="screens.length == 0">
         <NoSymbolIcon class="r-w-8 mr-2" />No Screen found ...
       </p>
-      <div v-else class="flex flex-wrap pax-10">
-        <div v-for="s in screens" :key="s._id" class="pa-5 w-2/6">
+      <div v-else class="flex flex-wrap sm:pax-10">
+        <div v-for="s in screens" :key="s._id" class="pa-5 w-1/2 sm:w-2/6 lg:w-1/4">
           <div class="border shadow-sm rounded-lg pa-5">
             <h2 class="flex justify-between w-full">
               <span class="text-normal-base text-gray-700 cursor-pointer hover:underline">{{

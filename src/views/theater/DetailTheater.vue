@@ -46,7 +46,7 @@ onMounted(() => {
   <div>
     <p
       class="text-normal text-blue-600 hover:underline cursor-pointer pa-10 flex items-center"
-      @click="router.push('/theater')"
+      @click="router.push(`/owner/view/${theater?.ownerId?._id ?? ''}`)"
     >
       <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back To List
     </p>
@@ -55,10 +55,10 @@ onMounted(() => {
       <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
     </p>
 
-    <div v-else class="theater-detail px-1 sm:px-2">
+    <div v-else class="theater-detail flex-col sm:flex-row px-1 sm:px-2">
       <img v-if="theater.image" :src="theater.image" :alt="theater.name" />
       <div>
-        <h2 class="r-text-3xl">
+        <h2 class="r-text-3xl text-center sm:text-start">
           {{ theater.name }}
           <span class="font-normal text-normal">
             {{ `${theater.location} - ${theater.city?.name}, ${theater.city?.state}` }}

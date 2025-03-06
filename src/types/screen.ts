@@ -3,4 +3,5 @@ export interface Screen {
   name?: string
   isActive?: boolean
   isDeleting?: boolean
+  totalSeats?: number
 }
