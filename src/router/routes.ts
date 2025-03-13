@@ -111,4 +111,10 @@ export const routes = [
     name: 'movie-filter-list',
     component: () => import('@/views/admin/movie/MovieFilterList.vue'),
   },
+
+  {
+    path: '/ticket',
+    name: 'buy-tickets',
+    component: () => import('@/views/ticket/BuyTickets.vue'),
+  },
 ]

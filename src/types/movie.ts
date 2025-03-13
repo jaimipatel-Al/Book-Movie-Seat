@@ -26,6 +26,6 @@ export interface Movie {
   createdAt?: string
   overview?: string
   duration?: number
-  isUpcoming?: boolean
+  categories?: string[]
   releaseDate?: string
 }

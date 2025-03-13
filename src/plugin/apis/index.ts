@@ -30,8 +30,10 @@ const requests = {
   deleteScreen: 'screens/delete-screen/', // Add Id
   toggleScreenStatus: 'screens/screen-status/', // Add Id
 
-  listMovie : 'movies/list',
-  movieSync : 'movies/sync-movies',
+  listMovie: 'movies/list',
+  movieSync: 'movies/sync-movies',
+  getMovie: 'movies/', // Add Id
+  addPoster :'/movies/update-movie/', // Add Id
 }
 
 export default requests

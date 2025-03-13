@@ -1,21 +1,26 @@
 <script setup lang="ts">
-import { ArrowPathIcon, NoSymbolIcon, StarIcon } from '@heroicons/vue/24/solid'
+import { ArrowPathIcon, NoSymbolIcon, StarIcon, ArrowLeftIcon } from '@heroicons/vue/24/solid'
 import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import type { Movie } from '@/types/movie'
+import { useRoute, useRouter } from 'vue-router'
+
+const router = useRouter()
+const route = useRoute()
 
 const isGetting = ref(false)
+const id = computed(() => route.params?.id ?? '')
 const movie = ref<Movie>({})
 
 const getMoviesList = async () => {
   isGetting.value = true
 
-  await Axios.get(`${api.listMovie}?page=1&limit=8`)
+  await Axios.get(`${api.getMovie}${id.value}`)
     .then(({ data }) => {
       const res = data.data
-      movie.value = res[1]
+      movie.value = res
       console.log(movie.value)
     })
     .catch((er) => {
@@ -69,10 +74,16 @@ onMounted(() => {
 
 <template>
   <div>
+    <p
+      class="text-normal text-blue-600 hover:underline cursor-pointer pa-10 flex items-center"
+      @click="router.push('/movie')"
+    >
+      <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back to movie list
+    </p>
     <p class="loading pa-10" v-if="isGetting">
       <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
     </p>
-    <p class="loading pa-10" v-else-if="!movie._id">
+    <p class="loading pa-10" v-else-if="!movie?._id">
       <NoSymbolIcon class="r-w-8 mr-2" />Can't found movie details ...
     </p>
 
@@ -85,24 +96,24 @@ onMounted(() => {
           class="w-full h-full object-cover"
         />
         <div
-          class="w-full h-full pa-10 flex items-center absolute top-0 bg-slate-700 bg-opacity-75 text-white"
+          class="w-full h-full pa-10 flex flex-col sm:flex-row items-center justify-center sm:justify-start absolute top-0 bg-slate-700 bg-opacity-75 text-white"
         >
           <img
             v-if="movie.posterUrl"
             :src="movie.posterUrl"
             :alt="movie.title"
-            class="w-auto h-full rounded-xl object-cover"
+            class="w-40 sm:w-auto h-auto sm:h-full rounded-xl object-cover"
           />
           <div class="pax-10">
             <h2 class="r-text-3xl">{{ movie.title }}</h2>
 
             <p
-              v-if="movie.isUpcoming && movie.releaseDate"
+              v-if="movie.categories?.find((e) => e == 'Upcoming') && movie.releaseDate"
               class="text-normal px-2 sm:px-3 py-1 sm:py-2 my-1.5 sm:my-3 bg-gray-900 bg-opacity-75 rounded-xl text-white"
             >
               Releasing on {{ formattedDate(movie.releaseDate) }}
             </p>
-            <div
+            <div v-else
               class="flex items-center text-normal px-2 sm:px-3 py-1 sm:py-2 my-1.5 sm:my-3 bg-gray-900 bg-opacity-75 rounded-xl text-white"
             >
               <StarIcon class="r-w-8 text-blue-700" />
@@ -113,16 +124,18 @@ onMounted(() => {
               class="text-normal px-2 sm:px-3 py-1 sm:py-1.5 bg-white bg-opacity-75 rounded-xl text-black font-semibold"
               >{{ addLanguage(movie.languages) }}</span
             >
-            <div class="flex items-center my-1.5 sm:my-3 text-normal-base">
+            <div class="flex flex-wrap items-center my-1.5 sm:my-3 text-normal-base">
               <span v-if="movie.duration">{{ formatMinutes(movie.duration) }} </span>
               <p v-if="movie.duration" class="bg-white w-2 h-2 rounded-full mx-1 sm:mx-2"></p>
               <span v-if="movie.genres?.length">{{ movie.genres.join(', ') }}</span>
               <p v-if="movie.genres?.length" class="bg-white w-2 h-2 rounded-full mx-1 sm:mx-2"></p>
-              <span v-if="!movie.isUpcoming && movie.releaseDate">
+              <span v-if="!movie.categories?.find((e) => e == 'Upcoming') && movie.releaseDate">
                 {{ formattedDate(movie.releaseDate) }}
               </span>
             </div>
-            <button class="blue-btn px-10 py-3 text-xl">Book Now</button>
+            <button class="blue-btn px-5 sm:px-10 py-2 sm:py-3 text-base sm:text-xl">
+              Book Now
+            </button>
           </div>
         </div>
       </div>
@@ -169,5 +182,17 @@ onMounted(() => {
 <style scoped>
 .img-bg-height {
   height: 500px;
+}
+
+@media screen and (max-width: 768px) {
+  .img-bg-height {
+    height: 350px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .img-bg-height {
+    height: 500px;
+  }
 }
 </style>

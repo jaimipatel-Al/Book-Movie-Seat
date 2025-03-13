@@ -16,8 +16,6 @@ const totalOwner = ref(0)
 const scrollComponent = ref()
 
 const getOwnerList = async () => {
-  console.log(page.value == 0, owners.value.length, totalOwner.value)
-
   if (page.value !== 0 && owners.value?.length == totalOwner.value) return
 
   page.value++
