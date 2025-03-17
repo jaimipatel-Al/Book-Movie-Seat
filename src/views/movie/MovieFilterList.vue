@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ArrowPathIcon, NoSymbolIcon, ArrowLeftIcon } from '@heroicons/vue/24/solid'
+import { ArrowPathIcon, NoSymbolIcon } from '@heroicons/vue/24/solid'
 import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import toast from '@/plugin/toast'
@@ -68,29 +68,27 @@ onMounted(() => {
 <template>
   <div>
     <div class="main-header">
-      <h2 class="flex items-center justify-between w-screen">
+      <h2 class="text-center w-screen">
+        {{
+          filter == 'new-movies'
+            ? 'Now Showing '
+            : filter == 'upcoming-movies'
+            ? 'Upcoming '
+            : filter == 'hindi-movies'
+            ? 'Hindi '
+            : filter == 'english-movies'
+            ? 'English '
+            : filter == 'gujarati-movies'
+            ? 'Gujarati'
+            : 'Recommended '
+        }}
+        Movies
         <span
-          class="text-normal text-blue-600 hover:underline cursor-pointer flex items-center"
+          class="text-normal font-normal hover:underline cursor-pointer"
           @click="router.push('/movie')"
         >
-          <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back to movie list
+          Back to movie list
         </span>
-        <span>
-          {{
-            filter == 'new-movies'
-              ? 'Now Showing '
-              : filter == 'upcoming-movies'
-              ? 'Upcoming '
-              : filter == 'hindi-movies'
-              ? 'Hindi '
-              : filter == 'english-movies'
-              ? 'English '
-              : filter == 'gujarati-movies'
-              ? 'Gujarati'
-              : 'Recommended '
-          }}
-          Movies</span
-        >
       </h2>
     </div>
 

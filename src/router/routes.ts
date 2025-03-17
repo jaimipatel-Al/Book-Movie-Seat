@@ -99,18 +99,40 @@ export const routes = [
   {
     path: '/movie',
     name: 'movie',
-    component: () => import('@/views/admin/movie/MovieList.vue'),
+    component: () => import('@/views/movie/MovieList.vue'),
   },
   {
     path: '/movie/:id',
     name: 'movie-detail',
-    component: () => import('@/views/admin/movie/MovieListDetail.vue'),
+    component: () => import('@/views/movie/MovieListDetail.vue'),
   },
   {
     path: '/movie-list/:filter',
     name: 'movie-filter-list',
-    component: () => import('@/views/admin/movie/MovieFilterList.vue'),
+    component: () => import('@/views/movie/MovieFilterList.vue'),
   },
+
+  // Shows
+
+  {
+    path: '/show/add',
+    name: 'add-show',
+    component: () => import('../views/show/AddEditShow.vue'),
+  },
+  {
+    path: '/show',
+    name: 'show-list',
+    component: () => import('../views/show/ShowList.vue'),
+  },
+  {
+    path: '/show/edit/:id',
+    name: 'edit-show',
+    component: () => import('../views/show/AddEditShow.vue'),
+  },
+
+
+
+
 
   {
     path: '/ticket',

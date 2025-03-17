@@ -32,6 +32,11 @@ const menus = [
     title: 'Movie',
     page: '/movie',
   },
+  {
+    isShow: authStore?.userData?.role == 'sub_admin',
+    title: 'Show',
+    page: '/show',
+  },
 ]
 
 const searchMovie = ref('')

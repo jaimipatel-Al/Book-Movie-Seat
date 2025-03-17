@@ -33,7 +33,17 @@ const requests = {
   listMovie: 'movies/list',
   movieSync: 'movies/sync-movies',
   getMovie: 'movies/', // Add Id
-  addPoster :'/movies/update-movie/', // Add Id
+  addPoster: '/movies/update-movie/', // Add Id
+
+  addShow: 'shows/add-show',
+  showList: 'shows/list/', // Add Theater Id
+  showDetails: 'shows/details/', // Add Id
+  updateShow: 'shows/update/', // Add Id
+  toggleShowStatus: 'shows/status/', // Add Id
+  deleteShow: 'shows/delete/', // Add Id
+
+  syncCron: 'cron/sync',
+  deleteCron: 'cron/delete-movies',
 }
 
 export default requests
