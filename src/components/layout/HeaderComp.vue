@@ -27,6 +27,11 @@ const menus = [
     title: 'Theaters',
     page: '/theater',
   },
+  {
+    isShow: true,
+    title: 'Movie',
+    page: '/movie',
+  },
 ]
 
 const searchMovie = ref('')
@@ -159,7 +164,7 @@ const closeSearch = () => {
 
           <template v-for="i in menus" :key="i.page">
             <li v-if="i.isShow" @click="router.push(i.page)">
-              {{ i.title }}
+              <span>{{ i.title }}</span>
               <ChevronRightIcon class="r-w-8 p-1 rounded-full cursor-pointer hover:bg-slate-200" />
             </li>
           </template>

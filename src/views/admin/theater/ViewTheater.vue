@@ -52,7 +52,7 @@ onMounted(() => {
     </p>
 
     <p class="loading pa-10" v-if="isGetting">
-      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+      <ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Getting Data ...
     </p>
 
     <div v-else class="theater-detail flex-col sm:flex-row px-1 sm:px-2">

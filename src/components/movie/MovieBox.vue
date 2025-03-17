@@ -79,7 +79,7 @@ const router = useRouter()
         class="rounded-xl w-full h-48 sm:h-64 md:h-72 lg:h-96 p-5 sm:p-10 flex justify-center items-center text-gray-500 border sm:border-2 border-gray-300"
         @click="file.click()"
       >
-        <CameraIcon class="" />
+        <CameraIcon />
         <input type="file" accept="image/*" ref="file" hidden @change="handleFileUpload" />
       </div>
       <div v-else-if="authStore?.userData?.role == 'super_admin' && imageUrl">

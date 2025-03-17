@@ -6,9 +6,11 @@ import toast from '@/plugin/toast'
 import { onMounted, ref, computed } from 'vue'
 import type { Movie } from '@/types/movie'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore()
 
 const isGetting = ref(false)
 const id = computed(() => route.params?.id ?? '')
@@ -81,7 +83,7 @@ onMounted(() => {
       <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back to movie list
     </p>
     <p class="loading pa-10" v-if="isGetting">
-      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+      <ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Getting Data ...
     </p>
     <p class="loading pa-10" v-else-if="!movie?._id">
       <NoSymbolIcon class="r-w-8 mr-2" />Can't found movie details ...
@@ -113,7 +115,8 @@ onMounted(() => {
             >
               Releasing on {{ formattedDate(movie.releaseDate) }}
             </p>
-            <div v-else
+            <div
+              v-else
               class="flex items-center text-normal px-2 sm:px-3 py-1 sm:py-2 my-1.5 sm:my-3 bg-gray-900 bg-opacity-75 rounded-xl text-white"
             >
               <StarIcon class="r-w-8 text-blue-700" />
@@ -133,7 +136,10 @@ onMounted(() => {
                 {{ formattedDate(movie.releaseDate) }}
               </span>
             </div>
-            <button class="blue-btn px-5 sm:px-10 py-2 sm:py-3 text-base sm:text-xl">
+            <button
+              class="blue-btn px-5 sm:px-10 py-2 sm:py-3 text-base sm:text-xl"
+              v-if="authStore?.userData?.role == 'customer'"
+            >
               Book Now
             </button>
           </div>

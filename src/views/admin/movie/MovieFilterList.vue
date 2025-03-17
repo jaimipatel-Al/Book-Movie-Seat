@@ -68,15 +68,31 @@ onMounted(() => {
 <template>
   <div>
     <div class="main-header">
-      <h2>Movies</h2>
+      <h2 class="flex items-center justify-between w-screen">
+        <span
+          class="text-normal text-blue-600 hover:underline cursor-pointer flex items-center"
+          @click="router.push('/movie')"
+        >
+          <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back to movie list
+        </span>
+        <span>
+          {{
+            filter == 'new-movies'
+              ? 'Now Showing '
+              : filter == 'upcoming-movies'
+              ? 'Upcoming '
+              : filter == 'hindi-movies'
+              ? 'Hindi '
+              : filter == 'english-movies'
+              ? 'English '
+              : filter == 'gujarati-movies'
+              ? 'Gujarati'
+              : 'Recommended '
+          }}
+          Movies</span
+        >
+      </h2>
     </div>
-
-    <p
-      class="text-normal text-blue-600 hover:underline cursor-pointer pa-10 flex items-center"
-      @click="router.push('/movie')"
-    >
-      <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back to movie list
-    </p>
 
     <p v-if="!isGetting && movies.length == 0" class="loading pa-10">
       <NoSymbolIcon class="r-w-8 mr-2" />No movie found ...
@@ -91,7 +107,7 @@ onMounted(() => {
       <MovieBox v-for="movie in movies" :key="movie._id" :movie="movie" />
     </div>
     <p class="loading pa-10" v-if="isGetting">
-      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+      <ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Getting Data ...
     </p>
   </div>
 </template>

@@ -114,7 +114,7 @@ onMounted(() => {
 <template>
   <div class="auth-form">
     <p v-if="isVerifying" class="loading text-white">
-      <ArrowPathIcon class="r-w-8 mr-2" />Verifying Data ...
+      <ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Verifying Data ...
     </p>
     <Form v-else @submit="createPassword" :validation-schema="schema" v-slot="{ errors }">
       <h1>Create Password</h1>
@@ -154,7 +154,7 @@ onMounted(() => {
       <p class="error-message">{{ errors?.ConfirmPassword }}</p>
 
       <button type="submit" :disabled="isLoading">
-        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Create Password
+        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" /> Create Password
       </button>
     </Form>
   </div>

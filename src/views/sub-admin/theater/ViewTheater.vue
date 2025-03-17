@@ -106,7 +106,7 @@ onMounted(() => {
     </div>
 
     <p class="loading pa-10" v-if="isGetting">
-      <ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...
+      <ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Getting Data ...
     </p>
     <div v-else>
       <div class="main-header">
@@ -126,7 +126,7 @@ onMounted(() => {
               <div class="flex">
                 <ArrowPathIcon
                   v-if="s.isDeleting"
-                  class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-0.5 sm:p-1 text-red-600"
+                  class="r-w-8 cursor-pointer hover:bg-slate-200 rounded-full p-0.5 sm:p-1 text-red-600 animate-spin"
                 />
                 <TrashIcon
                   v-else

@@ -92,7 +92,7 @@ const addOwner =async  () => {
       <p class="error-message">{{ errors?.Mobile }}</p>
 
       <button type="submit" :disabled="isLoading">
-        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Add Owner
+        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" /> Add Owner
       </button>
     </Form>
   </div>

@@ -125,7 +125,7 @@ onMounted(() => {
       </label>
 
       <button type="submit" :disabled="isLoading">
-        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Login
+        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" /> Login
       </button>
     </Form>
   </div>

@@ -97,7 +97,7 @@ onMounted(() => {
   <div class="add-edit-form">
     <h2>Update Your Profile</h2>
 
-    <p class="loading" v-if="isGetting"><ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...</p>
+    <p class="loading" v-if="isGetting"><ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Getting Data ...</p>
     <Form
       v-else
       class="edit-user-form"
@@ -166,7 +166,7 @@ onMounted(() => {
 
       <div>
         <button type="submit" :disabled="isLoading">
-          <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Update
+          <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" /> Update
         </button>
       </div>
     </Form>

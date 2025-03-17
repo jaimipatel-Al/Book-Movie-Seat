@@ -145,7 +145,7 @@ const signup = async () => {
       <p class="error-message">{{ errors?.ConfirmPassword }}</p>
 
       <button type="submit" :disabled="isLoading">
-        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" /> Sign Up
+        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" /> Sign Up
       </button>
     </Form>
   </div>

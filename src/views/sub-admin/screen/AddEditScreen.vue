@@ -102,7 +102,7 @@ onMounted(() => {
       {{ screenId ? 'Update' : 'Add' }} Screen
       <span @click="router.push(`/theater/view/${theaterId}`)"> Back To List </span>
     </h2>
-    <p class="loading" v-if="isGetting"><ArrowPathIcon class="r-w-8 mr-2" />Getting Data ...</p>
+    <p class="loading" v-if="isGetting"><ArrowPathIcon class="r-w-8 mr-2 animate-spin" />Getting Data ...</p>
     <Form
       v-else
       class="add-theater-form"
@@ -133,7 +133,7 @@ onMounted(() => {
       <p class="error-message">{{ errors?.Seat }}</p>
 
       <button type="submit" :disabled="isLoading">
-        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2" />
+        <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" />
         {{ screenId ? 'Update' : 'Add' }} Theater
       </button>
     </Form>
