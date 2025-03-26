@@ -36,7 +36,7 @@ const requests = {
   addPoster: '/movies/update-movie/', // Add Id
 
   addShow: 'shows/add-show',
-  showList: 'shows/list/', // Add Theater Id
+  showList: 'shows/list', // Add Theater Id
   showDetails: 'shows/details/', // Add Id
   updateShow: 'shows/update/', // Add Id
   toggleShowStatus: 'shows/status/', // Add Id

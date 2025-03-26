@@ -10,6 +10,7 @@ import toast from '@/plugin/toast'
 import type { Movie } from '@/types/movie'
 import type { Theater } from '@/types/theater'
 import type { Screen } from '@/types/screen'
+import { computed } from 'vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -18,7 +19,24 @@ const schema = yup.object({
   Theater: yup.string().required(),
   Screen: yup.string().required(),
   StartDate: yup.string().required('Start date is required'),
-  EndDate: yup.string().required('End date is required'),
+  EndDate: yup
+    .string()
+    .required('End date is required')
+    .test('is-after-start', 'End date must be after start date', function (value) {
+      const { StartDate } = this.parent
+      if (!StartDate || !value) return false
+      return new Date(value) >= new Date(StartDate)
+    }),
+  Time: yup.string().required('Time is required'),
+  Price: yup
+    .number()
+    .typeError('Price must be a number')
+    .required('Price is required')
+    .min(0)
+    .max(10000),
+})
+
+const updateSchema = yup.object({
   Price: yup
     .number()
     .typeError('Price must be a number')
@@ -31,7 +49,7 @@ const showId = ref('')
 const isGetting = ref(false)
 const isLoading = ref(false)
 const movieId = ref('')
-const movieDetail = ref<Movie>({})
+const detail = ref<Movie>({})
 const theater = ref('')
 const screen = ref('')
 const movieList = ref<Movie[]>([])
@@ -44,7 +62,9 @@ const isGettingTheater = ref(false)
 const isGettingScreen = ref(false)
 const startDate = ref('')
 const endDate = ref('')
+const time = ref('')
 const price = ref('')
+const status = ref(true)
 const scrollComponent = ref()
 
 const getMoviesList = async () => {
@@ -107,18 +127,19 @@ const addShow = async () => {
   isLoading.value = true
 
   const payload = {
-    ticketPrice: price.value,
     movieId: movieId.value,
     screenId: screen.value,
     theaterId: theater.value,
-    startTime: new Date(startDate.value),
-    endTime: new Date(endDate.value),
+    showDate: new Date(startDate.value),
+    ticketPrice: price.value,
+    showEndDate: new Date(endDate.value),
+    startTime: getTodayWithTimeUTC(time.value),
   }
 
   await Axios.post(api.addShow, payload)
     .then(({ data }) => {
       toast.success(data?.message ?? 'Show Added Successfully!')
-      router.push('/show')
+      router.go(-1)
     })
     .catch((er) => {
       toast.error(er?.response?.data?.message ?? "Show Can't Add!")
@@ -133,14 +154,13 @@ const updateShow = async () => {
 
   const payload = {
     ticketPrice: price.value,
-    startTime: new Date(startDate.value),
-    endTime: new Date(endDate.value),
+    status: status.value,
   }
 
   await Axios.put(`${api.updateShow}${showId.value}`, payload)
     .then(({ data }) => {
       toast.success(data?.message ?? 'Show Added Successfully!')
-      router.push('/show')
+      router.go(-1)
     })
     .catch((er) => {
       toast.error(er?.response?.data?.message ?? "Show Can't Add!")
@@ -168,6 +188,14 @@ const handleScroll = () => {
     getMoviesList()
 }
 
+const formattedTime = (val: string) => {
+  const date = new Date(val)
+  const hours = String(date.getUTCHours()).padStart(2, '0')
+  const minutes = String(date.getUTCMinutes()).padStart(2, '0')
+
+  return `${hours}:${minutes}`
+}
+
 const showDetails = async () => {
   isGetting.value = true
 
@@ -183,8 +211,10 @@ const showDetails = async () => {
       startDate.value = res.startTime?.split('T')[0]
       endDate.value = res.endTime?.split('T')[0]
       price.value = res.ticketPrice
+      time.value = formattedTime(res.startTime)
+      status.value = res.status
 
-      movieDetail.value = res.movieId
+      detail.value = res.movieId
     })
     .catch((er) => {
       toast.error(er?.response?.data?.message ?? "Show Detail Can't Load!")
@@ -219,6 +249,22 @@ const formatMinutes = (minutes: number) => {
   return `${hours}h ${mins}m`
 }
 
+const getTodayWithTimeUTC = (timeString: string) => {
+  const [hours, minutes] = timeString.split(':').map(Number)
+  const today = new Date()
+  today.setUTCHours(hours, minutes, 0, 0)
+
+  return today.toISOString()
+}
+
+const minDate = computed(() => {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0')
+  const day = String(today.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+})
+
 onMounted(() => {
   scrollComponent.value?.addEventListener('scroll', handleScroll)
   if (route?.params?.id) {
@@ -235,10 +281,7 @@ onMounted(() => {
   <div>
     <h2 class="r-text-3xl text-center pa-5">
       {{ showId ? 'Update' : 'Create' }} Show
-      <span
-        @click="router.push('/show')"
-        class="text-normal font-normal hover:underline cursor-pointer"
-      >
+      <span class="text-normal font-normal hover:underline cursor-pointer" @click="router.go(-1)">
         Back To List
       </span>
     </h2>
@@ -307,59 +350,50 @@ onMounted(() => {
       <div v-else class="w-full sm:w-1/2 md:w-3/4 pa-5">
         <div class="w-full img-bg-height relative">
           <img
-            v-if="movieDetail.backdropUrl"
-            :src="movieDetail.backdropUrl"
-            :alt="movieDetail.title"
+            v-if="detail.backdropUrl"
+            :src="detail.backdropUrl"
+            :alt="detail.title"
             class="w-full h-full object-cover"
           />
           <div
             class="w-full h-full pa-10 flex flex-col md:flex-row items-center justify-center md:justify-start absolute top-0 bg-slate-700 bg-opacity-75 text-white"
           >
             <img
-              v-if="movieDetail.posterUrl"
-              :src="movieDetail.posterUrl"
-              :alt="movieDetail.title"
+              v-if="detail.posterUrl"
+              :src="detail.posterUrl"
+              :alt="detail.title"
               class="w-40 md:w-auto h-auto md:h-full rounded-xl object-cover"
             />
             <div class="pax-10">
-              <h2 class="r-text-3xl">{{ movieDetail.title }}</h2>
+              <h2 class="r-text-3xl">{{ detail.title }}</h2>
               <p
-                v-if="
-                  movieDetail.categories?.find((e) => e == 'Upcoming') && movieDetail.releaseDate
-                "
+                v-if="detail.categories?.find((e) => e == 'Upcoming') && detail.releaseDate"
                 class="text-normal px-2 md:px-3 py-1 md:py-2 my-1.5 md:my-3 bg-gray-900 bg-opacity-75 rounded-xl text-white"
               >
-                Releasing on {{ formattedDate(movieDetail.releaseDate) }}
+                Releasing on {{ formattedDate(detail.releaseDate) }}
               </p>
               <div
                 v-else
                 class="flex items-center text-normal px-2 md:px-3 py-1 md:py-2 my-1.5 md:my-3 bg-gray-900 bg-opacity-75 rounded-xl text-white"
               >
                 <StarIcon class="r-w-8 text-blue-700" />
-                <span class="px-1 md:px-2">{{ movieDetail.rating?.toFixed(2) }} / 10</span>
+                <span class="px-1 md:px-2">{{ detail.rating?.toFixed(2) }} / 10</span>
               </div>
               <span
-                v-if="movieDetail.languages?.length"
+                v-if="detail.languages?.length"
                 class="text-normal px-2 md:px-3 py-1 md:py-1.5 bg-white bg-opacity-75 rounded-xl text-black font-semibold"
-                >{{ addLanguage(movieDetail.languages) }}</span
+                >{{ addLanguage(detail.languages) }}</span
               >
               <div class="flex flex-wrap items-center my-1.5 md:my-3 text-normal-base">
-                <span v-if="movieDetail.duration">{{ formatMinutes(movieDetail.duration) }} </span>
+                <span v-if="detail.duration">{{ formatMinutes(detail.duration) }} </span>
+                <p v-if="detail.duration" class="bg-white w-2 h-2 rounded-full mx-1 md:mx-2"></p>
+                <span v-if="detail.genres?.length">{{ detail.genres.join(', ') }}</span>
                 <p
-                  v-if="movieDetail.duration"
+                  v-if="detail.genres?.length"
                   class="bg-white w-2 h-2 rounded-full mx-1 md:mx-2"
                 ></p>
-                <span v-if="movieDetail.genres?.length">{{ movieDetail.genres.join(', ') }}</span>
-                <p
-                  v-if="movieDetail.genres?.length"
-                  class="bg-white w-2 h-2 rounded-full mx-1 md:mx-2"
-                ></p>
-                <span
-                  v-if="
-                    !movieDetail.categories?.find((e) => e == 'Upcoming') && movieDetail.releaseDate
-                  "
-                >
-                  {{ formattedDate(movieDetail.releaseDate) }}
+                <span v-if="!detail.categories?.find((e) => e == 'Upcoming') && detail.releaseDate">
+                  {{ formattedDate(detail.releaseDate) }}
                 </span>
               </div>
             </div>
@@ -369,7 +403,7 @@ onMounted(() => {
       <Form
         class="w-full sm:w-1/2 md:w-1/4 flex-none"
         @submit="showId ? updateShow() : addShow()"
-        :validation-schema="schema"
+        :validation-schema="showId ? updateSchema : schema"
         v-slot="{ errors }"
       >
         <label for="theater">Theater</label>
@@ -403,7 +437,35 @@ onMounted(() => {
           </select>
         </Field>
         <p class="error-message">{{ errors?.Screen }}</p>
-        <label for="startDate">Show Start Date {{ startDate }}</label>
+        <div v-if="!showId" class="sm:flex sm:space-x-2">
+          <div class="flex-1">
+            <label for="startDate">Show Start Date</label>
+            <Field
+              v-model="startDate"
+              type="date"
+              name="StartDate"
+              id="startDate"
+              class="input text-sm px-1"
+              placeholder="Enter Your Show Start Date"
+              :min="minDate"
+            />
+            <p class="error-message">{{ errors?.StartDate }}</p>
+          </div>
+          <div class="flex-1">
+            <label for="endDate">Show End Date</label>
+            <Field
+              v-model="endDate"
+              type="date"
+              name="EndDate"
+              id="endDate"
+              class="input text-sm px-1"
+              placeholder="Enter Your Show End Date"
+              :min="startDate ? startDate : minDate"
+            />
+            <p class="error-message">{{ errors?.EndDate }}</p>
+          </div>
+        </div>
+        <label v-if="showId" for="time">Show Date</label>
         <Field
           v-model="startDate"
           type="date"
@@ -411,18 +473,19 @@ onMounted(() => {
           id="startDate"
           class="input"
           placeholder="Enter Your Show Start Date"
+          :disabled="showId ? true : false"
         />
-        <p class="error-message">{{ errors?.StartDate }}</p>
-        <label for="endDate">Show End Date</label>
+        <label for="time">Show Time</label>
         <Field
-          v-model="endDate"
-          type="date"
-          name="EndDate"
-          id="endDate"
+          v-model="time"
+          type="time"
+          name="Time"
+          id="time"
           class="input"
-          placeholder="Enter Your Show End Date"
+          placeholder="Enter Your Show Time"
+          :disabled="showId ? true : false"
         />
-        <p class="error-message">{{ errors?.EndDate }}</p>
+        <p class="error-message">{{ errors?.Time }}</p>
         <label for="price">Price</label>
         <Field
           v-model="price"
@@ -433,6 +496,31 @@ onMounted(() => {
           placeholder="Enter Price"
         />
         <p class="error-message">{{ errors?.Price }}</p>
+
+        <div class="flex space-x-3 sm:space-x-4 md:space-x-5">
+          <div class="flex">
+            <input
+              type="radio"
+              id="ACTIVE"
+              name="status"
+              value="ACTIVE"
+              v-model="status"
+              class="mr-1 mat-5"
+            />
+            <label for="ACTIVE" class="text-xs sm:text-sm">Active Show</label>
+          </div>
+          <div class="flex">
+            <input
+              type="radio"
+              id="CANCELLED"
+              name="status"
+              value="CANCELLED"
+              v-model="status"
+              class="mr-1 mat-5"
+            />
+            <label for="CANCELLED" class="text-xs sm:text-sm">Cancelled Show</label>
+          </div>
+        </div>
 
         <button type="submit" :disabled="isLoading">
           <ArrowPathIcon v-if="isLoading" class="r-w-8 mr-2 animate-spin" />

@@ -93,6 +93,11 @@ export const routes = [
     name: 'edit-screen',
     component: () => import('../views/sub-admin/screen/AddEditScreen.vue'),
   },
+  {
+    path: '/screen/view/:id',
+    name: 'view-screen',
+    component: () => import('../views/sub-admin/screen/ViewScreen.vue'),
+  },
 
   // Movie
 
