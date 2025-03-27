@@ -77,6 +77,7 @@ onMounted(() => {
               <div class="border shadow-sm rounded-lg px-3 py-2 sm:py-3">
                 <h2
                   class="flex justify-between w-full text-normal text-gray-800 font-semibold cursor-pointer hover:underline"
+                  @click="router.push(`/screen/view/${s._id}`)"
                 >
                   {{ s.name }}
                 </h2>

@@ -42,6 +42,12 @@ const requests = {
   toggleShowStatus: 'shows/status/', // Add Id
   deleteShow: 'shows/delete/', // Add Id
 
+  createSeat:'seat-layout/create-seat-layout',
+  showSeat:'seat-layout/{screenId}',
+  updateSeat:'seat-layout/{seatLayoutId}',
+  deleteSeat:'seat-layout/{seatLayoutId}',
+  getSeat:'seat-layout/{seatLayoutId}/seats',
+
   syncCron: 'cron/sync',
   deleteCron: 'cron/delete-movies',
 }

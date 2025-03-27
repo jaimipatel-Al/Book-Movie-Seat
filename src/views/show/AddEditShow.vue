@@ -497,7 +497,7 @@ onMounted(() => {
         />
         <p class="error-message">{{ errors?.Price }}</p>
 
-        <div class="flex space-x-3 sm:space-x-4 md:space-x-5">
+        <div v-if="showId" class="flex space-x-3 sm:space-x-4 md:space-x-5">
           <div class="flex">
             <input
               type="radio"

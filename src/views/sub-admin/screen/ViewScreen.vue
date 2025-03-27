@@ -1,11 +1,20 @@
 <script setup lang="ts">
-import { ArrowPathIcon, ArrowLeftIcon, NoSymbolIcon } from '@heroicons/vue/24/solid'
+import {
+  ArrowPathIcon,
+  ArrowLeftIcon,
+  NoSymbolIcon,
+  PencilIcon,
+  TrashIcon,
+} from '@heroicons/vue/24/solid'
 import { useRoute, useRouter } from 'vue-router'
 import Axios from '@/plugin/axios'
 import api from '@/plugin/apis'
 import { computed, onMounted, ref } from 'vue'
 import toast from '@/plugin/toast'
 import type { Show } from '@/types/show'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 
 const router = useRouter()
 const route = useRoute()
@@ -103,6 +112,17 @@ const nextFiveDays = computed(() => {
   return days
 })
 
+const deleteShow = async (val: Show) => {
+  await Axios.delete(`${api.deleteShow}${val._id}`)
+    .then(({ data }) => {
+      toast.success(data.message ?? 'Show deleted successfully.')
+      showList()
+    })
+    .catch((er) => {
+      toast.error(er?.response?.data?.message ?? "Show Can't Deleted!")
+    })
+}
+
 onMounted(() => {
   selectedDate.value = nextFiveDays.value[0].date
   getScreen()
@@ -127,9 +147,18 @@ onMounted(() => {
         <h2 class="text-center">{{ name }}</h2>
         <p>Seat : {{ seat }}</p>
       </div>
+      <!-- seatLayoutId -->
+      <!-- <button class="blue-outline" @click="router.push('/owner/add')">Add Owner</button> -->
+      <button></button>
       <div class="flex justify-between pa-10">
         <h3 class="font-bold text-normal-base">Show</h3>
-        <button class="blue-outline" @click="router.push('/show/add')">Add New Show</button>
+        <button
+          v-if="authStore?.userData?.role == 'sub_admin'"
+          class="blue-outline"
+          @click="router.push('/show/add')"
+        >
+          Add New Show
+        </button>
       </div>
       <div class="flex space-x-1 sm:space-x-2 justify-center mb-5">
         <div
@@ -158,14 +187,14 @@ onMounted(() => {
         >
           <img :src="sh.movieId.posterUrl" :alt="sh.movieId.title" class="w-28 sm:w-36" />
           <div>
-            <div>
+            <div class="flex space-x-5">
               <p
                 class="text-blue-700 text-normal cursor-pointer"
                 @click="router.push(`/movie/${sh.movieId._id}`)"
               >
                 {{ sh.movieId.title }}
               </p>
-              <div class="flex">
+              <div v-if="authStore?.userData?.role == 'sub_admin'" class="flex">
                 <PencilIcon
                   class="p-1 text-green-700 r-w-8 hover:bg-slate-200 cursor-pointer rounded-full"
                   @click="router.push(`/show/edit/${sh._id}`)"
@@ -175,17 +204,19 @@ onMounted(() => {
                   @click="deleteShow(sh)"
                 />
               </div>
-              <div class="text-normal font-semibold">
-                <p class="text-cyan-600 mr-4">{{ formatMinutes(sh.movieId.duration) }}</p>
-                <p class="text-amber-600">{{ sh.movieId.rating?.toFixed(2) }} / 10</p>
-              </div>
             </div>
-            <p class="text-gray-900 text-normal">₹ {{ sh.ticketPrice }}/-</p>
+            <p class="text-cyan-600 text-normal font-semibold mr-4">
+              {{ formatMinutes(sh.movieId.duration) }}
+            </p>
+            <p class="text-amber-600 text-normal font-semibold">
+              {{ sh.movieId.rating?.toFixed(2) }} / 10
+            </p>
+            <p class="text-gray-900 text-normal font-semibold">₹ {{ sh.ticketPrice }}/-</p>
             <p class="text-gray-700 text-xs sm:text-sm">
               {{ formattedTime(sh.startTime) }}
             </p>
 
-            <div class="pt-2 sm:pt-4">
+            <div v-if="authStore?.userData?.role == 'sub_admin'" class="pt-2 sm:pt-4">
               <input
                 type="radio"
                 :id="`${sh._id}-ACTIVE`"
@@ -205,6 +236,12 @@ onMounted(() => {
               />
               <label :for="`${sh._id}-CANCELLED`" class="text-xs sm:text-sm">Cancelled Show</label
               ><br />
+            </div>
+            <div v-else class="pt-2 sm:pt-4">
+              <label v-if="sh.status == 'ACTIVE'" class="text-normal text-green-700"
+                >Active Show</label
+              >
+              <label v-else class="text-normal text-red-700">Cancelled Show</label>
             </div>
           </div>
         </div>

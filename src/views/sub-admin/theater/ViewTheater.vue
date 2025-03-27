@@ -5,80 +5,91 @@ import {
   TrashIcon,
   PencilIcon,
   ArrowLeftIcon,
-} from "@heroicons/vue/24/solid";
-import { useRoute, useRouter } from "vue-router";
-import Axios from "@/plugin/axios";
-import api from "@/plugin/apis";
-import toast from "@/plugin/toast";
-import { computed, onMounted, ref } from "vue";
-import type { Screen } from "@/types/screen";
-import type { Theater } from "@/types/theater";
+} from '@heroicons/vue/24/solid'
+import { useRoute, useRouter } from 'vue-router'
+import Axios from '@/plugin/axios'
+import api from '@/plugin/apis'
+import toast from '@/plugin/toast'
+import { computed, onMounted, ref } from 'vue'
+import type { Screen } from '@/types/screen'
+import type { Theater } from '@/types/theater'
+import { useAuthStore } from '@/stores/auth'
+import { watch } from 'vue'
 
-const router = useRouter();
-const route = useRoute();
+const authStore = useAuthStore()
 
-const id = computed(() => route.params?.id ?? "");
+const router = useRouter()
+const route = useRoute()
 
-const isGetting = ref(false);
-const screens = ref<Screen[]>([]);
-const theater = ref<Theater>({});
+const id = computed(() => route.params?.id ?? '')
+
+const isGetting = ref(false)
+const screens = ref<Screen[]>([])
+const theater = ref<Theater>({})
 
 const deleteScreen = async (val: Screen) => {
-  val.isDeleting = true;
+  val.isDeleting = true
 
   await Axios.delete(`${api.deleteScreen}${val._id}`)
     .then(({ data }) => {
-      screenList();
-      toast.success(data.message ?? "Screen deleted successfully.");
+      screenList()
+      toast.success(data.message ?? 'Screen deleted successfully.')
     })
     .catch((er) => {
-      toast.error(er?.response?.data?.message ?? "Screen Can't Deleted!");
+      toast.error(er?.response?.data?.message ?? "Screen Can't Deleted!")
     })
     .finally(() => {
-      val.isDeleting = false;
-    });
-};
+      val.isDeleting = false
+    })
+}
 
 const toggleScreenStatus = async (id?: string) => {
   await Axios.patch(`${api.toggleScreenStatus}${id}`)
     .then(({ data }) => {
-      toast.success(data.message);
+      toast.success(data.message)
     })
     .catch((er) => {
-      toast.error(er?.response?.data?.message ?? "Screen Status Can't Change!");
-    });
-};
+      toast.error(er?.response?.data?.message ?? "Screen Status Can't Change!")
+    })
+}
 
 const screenList = async () => {
-  isGetting.value = true;
+  isGetting.value = true
 
   await Axios.get(`${api.screenList}${id.value}`)
     .then(({ data }) => {
-      const res = data.data;
+      const res = data.data
       screens.value =
         res.screens?.map((e: Screen) => {
-          return { ...e, isDeleting: false };
-        }) ?? [];
-      theater.value = res?.theaterData ?? {};
+          return { ...e, isDeleting: false }
+        }) ?? []
+      theater.value = res?.theaterData ?? {}
     })
     .catch((er) => {
-      toast.error(er?.response?.data?.message ?? "Screen details Can't Load!");
+      toast.error(er?.response?.data?.message ?? "Screen details Can't Load!")
     })
     .finally(() => {
-      isGetting.value = false;
-    });
-};
+      isGetting.value = false
+    })
+}
+
+const back = () => {
+  // console.log(router);
+  // console.log(route);
+
+  router.go(-1)
+}
 
 onMounted(() => {
-  screenList();
-});
+  screenList()
+})
 </script>
 
 <template>
   <div>
     <p
       class="text-normal text-blue-600 hover:underline cursor-pointer pa-10 flex items-center"
-      @click="router.go(-1)"
+      @click="back"
     >
       <ArrowLeftIcon class="r-w-8 cursor-pointer px-1" />Back To List
     </p>
@@ -102,9 +113,7 @@ onMounted(() => {
           <td>{{ theater.no_of_screens }}</td>
         </tr>
         <tr>
-          <td colspan="2" v-if="!theater.isActive" class="error-message">
-            Not Active yet !!
-          </td>
+          <td colspan="2" v-if="!theater.isActive" class="error-message">Not Active yet !!</td>
         </tr>
       </table>
     </div>
@@ -115,7 +124,11 @@ onMounted(() => {
     <div v-else>
       <div class="main-header">
         <h2>Screens</h2>
-        <button class="blue-outline" @click="router.push(`/screen/add?theaterId=${id}`)">
+        <button
+          v-if="authStore?.userData?.role == 'sub_admin'"
+          class="blue-outline"
+          @click="router.push(`/screen/add?theaterId=${id}`)"
+        >
           Add Screens
         </button>
       </div>

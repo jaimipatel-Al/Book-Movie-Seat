@@ -6,6 +6,9 @@ import toast from "@/plugin/toast";
 import { onMounted, ref } from "vue";
 import type { Movie } from "@/types/movie";
 import MovieList from "@/components/movie/MovieList.vue";
+import { useAuthStore } from "@/stores/auth";
+
+const authStore = useAuthStore()
 
 const isGetting = ref(false);
 const movies = ref<Movie[]>([]);
@@ -104,7 +107,9 @@ onMounted(() => {
   <div>
     <div class="main-header">
       <h2>Movies</h2>
-      <button class="blue-outline" :disabled="isSync" @click="movieSync()">
+      <button
+      v-if="authStore?.userData?.role == 'super_admin'"
+      class="blue-outline" :disabled="isSync" @click="movieSync()">
         <ArrowPathIcon class="r-w-8 animate-spin mx-1" v-if="isSync" /> Sync New Movies
       </button>
     </div>
